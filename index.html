@@ -6,13 +6,13 @@
 <title>35×45 Sınır Kapısı</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #0a0a0b; --ink2: #141416; --line: #2b2b2f;
     --bone: #ece6d8; --paper: #f1ebdc; --mute: #8b877d;
     --red: #ff3b1f; --acid: #d4ff3a; --blue: #2f6bff;
-    --display: 'Anton', Impact, sans-serif;
+    --display: 'Anton', 'Oswald', Impact, sans-serif;
     --serif: 'Instrument Serif', Georgia, serif;
     --mono: 'JetBrains Mono', ui-monospace, monospace;
   }
@@ -36,7 +36,7 @@
   /* ---------- hero ---------- */
   .hero { position: relative; min-height: calc(100vh - 38px); display: grid; grid-template-columns: 1fr auto; align-items: end; padding: 24px clamp(16px, 4vw, 56px) 40px; gap: 24px; }
   .hero-top { position: absolute; top: 24px; left: clamp(16px, 4vw, 56px); right: clamp(16px, 4vw, 56px); display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .2em; color: var(--mute); text-transform: uppercase; }
-  .hero-top .live::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--red); border-radius: 50%; margin-right: 8px; animation: blink 1.2s infinite; }
+  .hero-top .live::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--red); border-radius: 50%; margin-inline-end: 8px; animation: blink 1.2s infinite; }
   @keyframes blink { 50% { opacity: .15; } }
   .mega { font-family: var(--display); font-size: clamp(130px, 27vw, 440px); line-height: .78; letter-spacing: -.02em; margin: 0; text-transform: uppercase; }
   .mega .x { color: var(--red); display: inline-block; animation: spin-x 6s cubic-bezier(.7,0,.3,1) infinite; }
@@ -101,7 +101,7 @@
   .field em { font: italic 17px var(--serif); }
   .mrz { margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,.2); font: 700 clamp(9px, 1.45vw, 13px)/1.6 var(--mono); letter-spacing: .14em; white-space: pre; overflow: hidden; color: #2a2823; }
 
-  .stamp { position: absolute; right: 6%; bottom: 22%; padding: 10px 18px; border: 4px double currentColor; border-radius: 10px; text-align: center; transform: rotate(-14deg) scale(1); pointer-events: none; mix-blend-mode: multiply; opacity: 0; font-family: var(--display); text-transform: uppercase; }
+  .stamp { position: absolute; inset-inline-end: 6%; bottom: 22%; padding: 10px 18px; border: 4px double currentColor; border-radius: 10px; text-align: center; transform: rotate(-14deg) scale(1); pointer-events: none; mix-blend-mode: multiply; opacity: 0; font-family: var(--display); text-transform: uppercase; }
   .stamp b { display: block; font-weight: 400; font-size: clamp(30px, 4vw, 48px); line-height: 1; letter-spacing: .04em; }
   .stamp small { display: block; font: 700 9px var(--mono); letter-spacing: .25em; margin-top: 4px; }
   .stamp.ok { color: rgba(205,34,10,.85); opacity: 1; animation: stamp .45s cubic-bezier(.3,1.4,.5,1) both; }
@@ -136,19 +136,16 @@
   .note { font-size: 11.5px; color: var(--mute); line-height: 1.6; }
   .note b { color: var(--bone); font-weight: 700; }
 
-  /* ---------- light table ---------- */
-  .print { display: grid; grid-template-columns: minmax(250px, 340px) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
-  .table { perspective: 1400px; padding: 30px 0; }
-  .table-glow { position: relative; padding: clamp(16px, 3vw, 40px); background: radial-gradient(ellipse at center, #2a2a20 0%, var(--ink) 70%); }
-  #sheet { width: 100%; display: block; background: #fff; transform: rotateX(24deg) rotateZ(-4deg) translateY(-10px); transform-origin: 50% 60%; box-shadow: 0 50px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.1); transition: transform .7s cubic-bezier(.2,1,.3,1); }
-  .table:hover #sheet { transform: none; }
+  /* ---------- print section ---------- */
+  .print { display: grid; grid-template-columns: minmax(250px, 340px) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+  .table { padding: 10px 0; }
   .table-cap { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .2em; color: var(--mute); text-transform: uppercase; margin-top: 18px; }
 
   /* ---------- rules ---------- */
   .rules { list-style: none; margin: 0; padding: 0; counter-reset: r; }
   .rules li { counter-increment: r; display: grid; grid-template-columns: 90px 1fr auto; gap: 20px; align-items: baseline; padding: 22px 0; border-bottom: 1px solid var(--line); font: 400 clamp(26px, 3.6vw, 52px)/1 var(--display); text-transform: uppercase; transition: color .2s, padding .3s; }
   .rules li::before { content: counter(r, decimal-leading-zero); font: 400 14px var(--mono); color: var(--red); }
-  .rules li span { font: italic 18px/1.3 var(--serif); text-transform: none; color: var(--mute); max-width: 320px; text-align: right; }
+  .rules li span { font: italic 18px/1.3 var(--serif); text-transform: none; color: var(--mute); max-width: 320px; text-align: end; }
   .rules li:hover { color: var(--acid); padding-left: 16px; }
 
   footer { padding: 40px clamp(16px, 4vw, 56px) 90px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); border-top: 1px solid var(--line); }
@@ -172,8 +169,8 @@
     .pp-body { grid-template-columns: 1fr; }
     .slot { max-width: 260px; }
     .rules li { grid-template-columns: 44px 1fr; }
-    .rules li span { grid-column: 2; text-align: left; }
-    .stamp { right: 4%; bottom: 30%; }
+    .rules li span { grid-column: 2; text-align: start; }
+    .stamp { inset-inline-end: 4%; bottom: 30%; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
@@ -212,12 +209,41 @@
   .total { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--mute); flex-wrap: wrap; }
   .linkbtn { background: none; border: 0; padding: 0; color: var(--acid); font: 700 11px var(--mono); letter-spacing: .15em; text-transform: uppercase; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
 
-  /* multiple sheets on the light table */
-  #sheets { display: flex; flex-direction: column; gap: 34px; align-items: center; }
-  #sheets canvas { width: 100%; display: block; background: #fff; transform: rotateX(24deg) rotateZ(-4deg) translateY(-10px); transform-origin: 50% 60%; box-shadow: 0 50px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.1); transition: transform .7s cubic-bezier(.2,1,.3,1); }
-  #sheets canvas.portrait { width: min(100%, 420px); }
-  #sheets canvas:nth-child(even) { transform: rotateX(24deg) rotateZ(3deg) translateY(-10px); }
-  .table:hover #sheets canvas { transform: none; }
+  /* ---------- printer ---------- */
+  .printer { position: relative; }
+  .printer-head { position: relative; z-index: 2; height: 54px; border-radius: 12px 12px 6px 6px;
+    background: linear-gradient(#34343a, #1c1c20 70%, #141417); box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 18px 30px -12px rgba(0,0,0,.9); }
+  .printer-head::before { content: ''; position: absolute; top: 14px; inset-inline-end: 18px; width: 8px; height: 8px; border-radius: 50%; background: #3a3a3a; }
+  .printer.feeding .printer-head::before { background: var(--acid); box-shadow: 0 0 10px var(--acid); animation: blink .4s steps(1) infinite; }
+  .printer-head::after { content: ''; position: absolute; left: 5%; right: 5%; bottom: 8px; height: 7px; border-radius: 4px; background: #000; box-shadow: 0 2px 0 rgba(255,255,255,.06); }
+  .printer-head span { position: absolute; top: 12px; inset-inline-start: 18px; font: 700 9px var(--mono); letter-spacing: .3em; color: #6b6b70; }
+  .printer-out { position: relative; margin: -14px 7% 0; padding-top: 14px; overflow: hidden; }
+  #sheets { display: flex; flex-direction: column; gap: 22px; align-items: center; }
+  .page { position: relative; width: 100%; box-shadow: 0 30px 40px -18px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.08); }
+  .page.portrait { width: min(100%, 420px); }
+  .page canvas { width: 100%; display: block; background: #fff; }
+  /* glossy photo-paper reflection */
+  .page::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.55) 47%, rgba(255,255,255,.15) 53%, transparent 62%) no-repeat;
+    background-size: 300% 100%; background-position: 100% 0; mix-blend-mode: soft-light; }
+  .page::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(0,0,0,.18), transparent 12%); }
+  .printer.feeding .page:first-child { animation: feed 2.4s linear both; }
+  .printer.feeding .page:not(:first-child) { animation: fadein .5s 2.2s both; }
+  .printer.feeding .page::after { animation: sheen 1.4s 2.3s ease-out both; }
+  @keyframes feed {
+    0% { transform: translateY(-100%); } 14% { transform: translateY(-84%); } 22% { transform: translateY(-84%); }
+    38% { transform: translateY(-60%); } 46% { transform: translateY(-60%); } 62% { transform: translateY(-34%); }
+    70% { transform: translateY(-34%); } 92% { transform: translateY(0); } 96% { transform: translateY(-1.2%); } 100% { transform: translateY(0); }
+  }
+  @keyframes fadein { from { opacity: 0; transform: translateY(-12px); } }
+  @keyframes sheen { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+  /* ---------- RTL / script tweaks ---------- */
+  .ticker, .mrz, input[type=range], .stepper, .thumb .n, .mega, .disc svg { direction: ltr; }
+  .disc text { unicode-bidi: plaintext; }
+  html:lang(ar) *, html:lang(fa) * { letter-spacing: 0 !important; }
+  html:lang(ar) .mega-sub .serif, html:lang(fa) .mega-sub .serif, html:lang(zh) .mega-sub .serif,
+  html:lang(ar) .sec-head p, html:lang(fa) .sec-head p, html:lang(zh) .sec-head p { font-style: normal; }
 </style>
 </head>
 <body>
@@ -309,7 +335,10 @@
       <p class="note" data-i18n-html="printNote"></p>
     </div>
     <div class="table">
-      <div class="table-glow"><div id="sheets"></div></div>
+      <div class="printer" id="printer">
+        <div class="printer-head"><span>300 DPI</span></div>
+        <div class="printer-out"><div id="sheets"></div></div>
+      </div>
       <div class="table-cap"><span id="sheetCap"></span><span data-i18n="hover"></span></div>
     </div>
   </div>
@@ -347,8 +376,8 @@ const PAPERS = {
 const I18N = {
   tr: {
     title: 'Vize Fotoğrafı 35×45', drop: 'BIRAK!',
-    live: 'Kontrol noktası açık', heroRight: 'Biyometrik fotoğraf · Schengen',
-    tagline: 'sınırda takılma.',
+    live: 'Başvuru masası açık', heroRight: 'Biyometrik fotoğraf · Schengen',
+    tagline: 'vize başvurusuna hazır.',
     tag: 'Fotoğrafları at, yüzü bulsun, milimetresine kadar kırpsın, baskı kağıdına dizsin. Hiçbir şey cihazından çıkmaz.',
     ring: 'Fotoğraflarını buraya at ✦ sürükle ya da tıkla ✦ ',
     ticker: ['ÇENE → TEPE 32–36 MM', '35 × 45 MM', 'AÇIK RENK ARKA PLAN', 'NÖTR İFADE · AĞIZ KAPALI', 'GÖZLER AÇIK · KAMERAYA BAK', 'SON 6 AY', 'GÖLGE YOK · YANSIMA YOK', '300 DPI BASKI'],
@@ -361,15 +390,15 @@ const I18N = {
     zoom: 'Yakınlaştır', rotate: 'Döndür', removeBg: 'Arka planı sil', bgColor: 'Arka plan rengi', white: 'Beyaz', grey: 'Açık gri',
     auto: '↻ Otomatik hizala', single: '↓ Tek foto', add: '+ Ekle', removePhoto: 'Fotoğrafı kaldır',
     note: 'Fotoğrafı <b>sürükle</b> → kaydır. <b>Tekerlek</b> → yakınlaştır. Saçın tepesi <b>mavi</b> çizgide, çene <b>yeşil</b> bantta olsun. Mühür kırmızıysa tamamdır.',
-    secPrint: 'Baskı', secPrintSub: 'ışıklı masada bir kontrol et',
+    secPrint: 'Baskı', secPrintSub: 'yazıcıdan sıcak sıcak',
     paper: 'Kağıt', capacity: 'fotoğraf sığar · sayfa başına', copies: 'Kaçar adet', fillEven: 'Sayfayı eşit doldur',
     total: 'Toplam {n} foto · {p} sayfa', cut: 'Kesim çizgileri',
     dl: '↓ Baskı dosyasını indir', dlN: '↓ {p} baskı dosyasını indir', print: '⎙ Yazdır', noPhotos: 'önce fotoğraf ekle',
     printNote: 'JPG 300 DPI, gerçek ölçü bilgisi gömülü — fotoğrafçıya seçtiğin kağıt boyutunda baskı olarak ver. Evde yazdırırken ölçek <b>%100 / gerçek boyut</b>, "sayfaya sığdır" kapalı.',
-    hover: 'üstüne gel → düzleştir', pages: '{p} sayfa',
+    hover: 'önizleme · gerçek oranlar', pages: '{p} sayfa',
     secRules: 'Kurallar', secRulesSub: 'konsoloslukta geri dönmesin diye',
     rules: [['35 × 45 mm, renkli', 'son 6 ay içinde çekilmiş'], ['Çene → tepe 32–36 mm', "fotoğrafın %70–80'i yüz"], ['Açık, düz arka plan', 'beyaz ya da açık gri, gölgesiz'], ['Düz bak, ağız kapalı', 'nötr ifade, gözler açık ve net'], ['Gözlük yok, yansıma yok', 'varsa çerçeve gözü kapatmasın'], ['Yüz tamamen açık', 'başörtüsü yalnızca dini sebeple'], ['Filtre yok, rötuş yok', 'keskin, doğal ten rengi']],
-    foot1: 'Sunucu yok · yükleme yok · her şey tarayıcında', foot2: '35×45 · sınır kapısı',
+    foot1: 'Sunucu yok · yükleme yok · her şey tarayıcında', foot2: '35×45 · vize başvurusu',
     sLoading: 'Yüz algılama modeli yükleniyor…', sReady: 'Hazır. Fotoğraf ekle.', sModelReady: 'Model hazır.',
     sModelFail: 'Yüz algılama yüklenemedi (internet?). Elle hizalayabilirsin.', sDetecting: 'Yüz algılanıyor…',
     sFound: 'Yüz bulundu ve otomatik hizalandı. Gerekirse ince ayar yap.', sNoFace: 'Yüz bulunamadı. Elle hizala.',
@@ -379,8 +408,8 @@ const I18N = {
   },
   en: {
     title: 'Visa Photo 35×45', drop: 'DROP!',
-    live: 'Checkpoint open', heroRight: 'Biometric photo · Schengen',
-    tagline: "don't get stuck at the border.",
+    live: 'Application desk open', heroRight: 'Biometric photo · Schengen',
+    tagline: 'ready for your visa application.',
     tag: 'Drop your photos. It finds the face, crops to the millimetre and lays them out for print. Nothing leaves your device.',
     ring: 'Drop your photos here ✦ drag or click ✦ ',
     ticker: ['CHIN → CROWN 32–36 MM', '35 × 45 MM', 'LIGHT PLAIN BACKGROUND', 'NEUTRAL FACE · MOUTH CLOSED', 'EYES OPEN · LOOK AT THE CAMERA', 'LAST 6 MONTHS', 'NO SHADOWS · NO GLARE', '300 DPI PRINT'],
@@ -393,15 +422,15 @@ const I18N = {
     zoom: 'Zoom', rotate: 'Rotate', removeBg: 'Replace background', bgColor: 'Background colour', white: 'White', grey: 'Light grey',
     auto: '↻ Auto-align', single: '↓ Single photo', add: '+ Add', removePhoto: 'Remove photo',
     note: '<b>Drag</b> the photo to move it. <b>Scroll</b> to zoom. Top of the hair on the <b>blue</b> line, chin inside the <b>green</b> band. A red stamp means you\'re good.',
-    secPrint: 'Print', secPrintSub: 'check it on the light table',
+    secPrint: 'Print', secPrintSub: 'fresh off the printer',
     paper: 'Paper', capacity: 'photos fit · per sheet', copies: 'Copies', fillEven: 'Fill sheet evenly',
     total: 'Total {n} photos · {p} sheet(s)', cut: 'Cut lines',
     dl: '↓ Download print file', dlN: '↓ Download {p} print files', print: '⎙ Print', noPhotos: 'add a photo first',
     printNote: 'JPG at 300 DPI with real-size metadata — give it to a photo lab at the chosen paper size. When printing at home pick <b>100% / actual size</b>, not "fit to page".',
-    hover: 'hover → flatten', pages: '{p} sheet(s)',
+    hover: 'preview · true proportions', pages: '{p} sheet(s)',
     secRules: 'Rules', secRulesSub: "so the consulate doesn't bounce it",
     rules: [['35 × 45 mm, colour', 'taken within the last 6 months'], ['Chin → crown 32–36 mm', 'face fills 70–80% of the photo'], ['Light, plain background', 'white or light grey, no shadows'], ['Look straight, mouth closed', 'neutral expression, eyes open and sharp'], ['No glasses, no glare', 'if worn, frames must not cover the eyes'], ['Face fully visible', 'head covering for religious reasons only'], ['No filters, no retouching', 'sharp, natural skin tone']],
-    foot1: 'No server · no upload · everything runs in your browser', foot2: '35×45 · border control',
+    foot1: 'No server · no upload · everything runs in your browser', foot2: '35×45 · visa application',
     sLoading: 'Loading face detection model…', sReady: 'Ready. Add a photo.', sModelReady: 'Model ready.',
     sModelFail: "Couldn't load face detection (offline?). You can still align manually.", sDetecting: 'Detecting face…',
     sFound: 'Face found and auto-aligned. Fine-tune if needed.', sNoFace: 'No face found. Align manually.',
@@ -409,40 +438,138 @@ const I18N = {
     sBgWorking: 'Separating background…', sBgDone: 'Background replaced. Check the hair edges.',
     sAdded: '{n} photo(s) added.',
   },
-  de: {
-    title: 'Visumfoto 35×45', drop: 'LOS!',
-    live: 'Kontrollpunkt offen', heroRight: 'Biometrisches Foto · Schengen',
-    tagline: 'bleib nicht an der Grenze hängen.',
-    tag: 'Fotos reinwerfen: Das Gesicht wird erkannt, millimetergenau zugeschnitten und für den Druck angeordnet. Nichts verlässt dein Gerät.',
-    ring: 'Fotos hier ablegen ✦ ziehen oder klicken ✦ ',
-    ticker: ['KINN → SCHEITEL 32–36 MM', '35 × 45 MM', 'HELLER, EINFARBIGER HINTERGRUND', 'NEUTRALER AUSDRUCK · MUND ZU', 'AUGEN OFFEN · IN DIE KAMERA', 'NICHT ÄLTER ALS 6 MONATE', 'KEINE SCHATTEN · KEINE SPIEGELUNG', '300 DPI DRUCK'],
-    secCheck: 'Prüfung', secCheckSub: 'ziehen · schieben · feinjustieren',
-    ppHead: 'Visumfoto', fHead: 'Kopfhöhe', fCrown: 'Abstand oben', fTarget: 'Soll', fSize: 'Format', fMethod: 'Messung', fDate: 'Datum',
-    mWait: 'warte auf ein Foto', mNoFace: 'kein Gesicht erkannt — manuell an blauer/grüner Linie ausrichten',
-    mMask: 'Scheitel aus der Haarmaske, Kinn aus Gesichtspunkten', mEst: 'Scheitel geschätzt — an der blauen Linie prüfen',
-    empty1: 'KEIN FOTO', empty2: 'klicken oder ablegen', lgCrown: 'Scheitel', lgChin: 'Kinn', lgAxis: 'Achse',
-    stOk: 'GENEHMIGT', stOkSub: 'MASSE OK', stBad: 'ANPASSEN', stBadSub: 'AN DEN LINIEN AUSRICHTEN',
-    zoom: 'Zoom', rotate: 'Drehen', removeBg: 'Hintergrund ersetzen', bgColor: 'Hintergrundfarbe', white: 'Weiß', grey: 'Hellgrau',
-    auto: '↻ Automatisch ausrichten', single: '↓ Einzelfoto', add: '+ Neu', removePhoto: 'Foto entfernen',
-    note: 'Foto <b>ziehen</b> → verschieben. <b>Mausrad</b> → zoomen. Haare oben auf der <b>blauen</b> Linie, Kinn im <b>grünen</b> Band. Roter Stempel = passt.',
-    secPrint: 'Druck', secPrintSub: 'auf dem Leuchttisch prüfen',
-    paper: 'Papier', capacity: 'Fotos passen · pro Blatt', copies: 'Anzahl', fillEven: 'Blatt gleichmäßig füllen',
-    total: 'Gesamt {n} Fotos · {p} Blatt', cut: 'Schnittlinien',
-    dl: '↓ Druckdatei laden', dlN: '↓ {p} Druckdateien laden', print: '⎙ Drucken', noPhotos: 'zuerst ein Foto hinzufügen',
-    printNote: 'JPG mit 300 DPI und eingebetteter Größe — im Fotolabor im gewählten Format drucken lassen. Zu Hause <b>100 % / tatsächliche Größe</b> wählen, nicht „an Seite anpassen".',
-    hover: 'Hover → flach', pages: '{p} Blatt',
-    secRules: 'Regeln', secRulesSub: 'damit das Konsulat es nicht ablehnt',
-    rules: [['35 × 45 mm, farbig', 'nicht älter als 6 Monate'], ['Kinn → Scheitel 32–36 mm', 'Gesicht füllt 70–80 % des Fotos'], ['Heller, einfarbiger Hintergrund', 'weiß oder hellgrau, ohne Schatten'], ['Gerade schauen, Mund zu', 'neutraler Ausdruck, Augen offen und scharf'], ['Keine Brille, keine Spiegelung', 'Gestell darf die Augen nicht verdecken'], ['Gesicht ganz sichtbar', 'Kopfbedeckung nur aus religiösen Gründen'], ['Keine Filter, keine Retusche', 'scharf, natürlicher Hautton']],
-    foot1: 'Kein Server · kein Upload · alles läuft im Browser', foot2: '35×45 · Grenzkontrolle',
-    sLoading: 'Gesichtserkennung wird geladen…', sReady: 'Bereit. Foto hinzufügen.', sModelReady: 'Modell bereit.',
-    sModelFail: 'Gesichtserkennung nicht geladen (offline?). Manuelles Ausrichten geht trotzdem.', sDetecting: 'Gesicht wird erkannt…',
-    sFound: 'Gesicht erkannt und ausgerichtet. Bei Bedarf feinjustieren.', sNoFace: 'Kein Gesicht erkannt. Manuell ausrichten.',
-    sNoModel: 'Modell noch nicht bereit; manuell ausrichten möglich.', sBgNoModel: 'Hintergrundmodell nicht bereit.',
-    sBgWorking: 'Hintergrund wird getrennt…', sBgDone: 'Hintergrund ersetzt. Haarkanten prüfen.',
-    sAdded: '{n} Foto(s) hinzugefügt.',
+  ru: {
+    title: 'Фото на визу 35×45', drop: 'БРОСАЙ!',
+    live: 'Окно приёма открыто', heroRight: 'Биометрическое фото · Шенген',
+    tagline: 'готово к подаче на визу.',
+    tag: 'Загрузи фото: лицо найдётся само, кадр обрежется с точностью до миллиметра и разложится на лист для печати. Ничего не покидает твоё устройство.',
+    ring: 'Брось фото сюда ✦ перетащи или нажми ✦ ',
+    ticker: ['ПОДБОРОДОК → МАКУШКА 32–36 ММ', '35 × 45 ММ', 'СВЕТЛЫЙ ОДНОТОННЫЙ ФОН', 'НЕЙТРАЛЬНОЕ ЛИЦО · РОТ ЗАКРЫТ', 'ГЛАЗА ОТКРЫТЫ · ВЗГЛЯД В КАМЕРУ', 'НЕ СТАРШЕ 6 МЕСЯЦЕВ', 'БЕЗ ТЕНЕЙ · БЕЗ БЛИКОВ', 'ПЕЧАТЬ 300 DPI'],
+    secCheck: 'Проверка', secCheckSub: 'тяни · двигай · подстраивай',
+    ppHead: 'Фото на визу', fHead: 'Высота головы', fCrown: 'Отступ сверху', fTarget: 'Норма', fSize: 'Размер', fMethod: 'Способ измерения', fDate: 'Дата',
+    mWait: 'ждём фото', mNoFace: 'лицо не найдено — выровняй вручную по синей и зелёной линиям',
+    mMask: 'макушка по маске волос, подбородок по точкам лица', mEst: 'макушка примерная — сверь с синей линией',
+    empty1: 'НЕТ ФОТО', empty2: 'нажми или перетащи', lgCrown: 'макушка', lgChin: 'подбородок', lgAxis: 'ось',
+    stOk: 'ОДОБРЕНО', stOkSub: 'РАЗМЕРЫ В НОРМЕ', stBad: 'ПОПРАВЬ', stBadSub: 'ВЫРОВНЯЙ ПО ЛИНИЯМ',
+    zoom: 'Масштаб', rotate: 'Поворот', removeBg: 'Заменить фон', bgColor: 'Цвет фона', white: 'Белый', grey: 'Светло-серый',
+    auto: '↻ Автовыравнивание', single: '↓ Одно фото', add: '+ Ещё', removePhoto: 'Удалить фото',
+    note: '<b>Тяни</b> фото, чтобы сдвинуть. <b>Колесо мыши</b> — масштаб. Верх волос на <b>синей</b> линии, подбородок в <b>зелёной</b> полосе. Красная печать — всё в порядке.',
+    secPrint: 'Печать', secPrintSub: 'прямо из принтера',
+    paper: 'Бумага', capacity: 'фото на один лист', copies: 'Количество', fillEven: 'Заполнить лист поровну',
+    total: 'Всего {n} фото · листов: {p}', cut: 'Линии реза',
+    dl: '↓ Скачать файл для печати', dlN: '↓ Скачать файлы для печати ({p})', print: '⎙ Печать', noPhotos: 'сначала добавь фото',
+    printNote: 'JPG 300 DPI с реальным размером внутри — отдай в фотосалон на выбранном формате. Дома печатай в масштабе <b>100% / реальный размер</b>, без «вписать в страницу».',
+    hover: 'превью · реальные пропорции', pages: 'листов: {p}',
+    secRules: 'Правила', secRulesSub: 'чтобы консульство не завернуло',
+    rules: [['35 × 45 мм, цветное', 'снято не более 6 месяцев назад'], ['Подбородок → макушка 32–36 мм', 'лицо занимает 70–80% снимка'], ['Светлый однотонный фон', 'белый или светло-серый, без теней'], ['Взгляд прямо, рот закрыт', 'нейтральное выражение, глаза открыты'], ['Без очков и бликов', 'оправа не должна закрывать глаза'], ['Лицо полностью открыто', 'головной убор только по религиозным причинам'], ['Без фильтров и ретуши', 'резкое фото, естественный цвет кожи']],
+    foot1: 'Без сервера · без загрузки · всё работает в браузере', foot2: '35×45 · подача на визу',
+    sLoading: 'Загружается распознавание лица…', sReady: 'Готово. Добавь фото.', sModelReady: 'Модель готова.',
+    sModelFail: 'Не удалось загрузить распознавание (нет сети?). Можно выровнять вручную.', sDetecting: 'Ищем лицо…',
+    sFound: 'Лицо найдено и выровнено. Подправь, если нужно.', sNoFace: 'Лицо не найдено. Выровняй вручную.',
+    sNoModel: 'Модель ещё не готова; можно выровнять вручную.', sBgNoModel: 'Модель фона ещё не готова.',
+    sBgWorking: 'Отделяем фон…', sBgDone: 'Фон заменён. Проверь края волос.',
+    sAdded: 'Добавлено фото: {n}.',
+  },
+  ar: {
+    title: 'صورة التأشيرة 35×45', drop: 'أفلِت!',
+    live: 'مكتب الطلبات مفتوح', heroRight: 'صورة بيومترية · شنغن',
+    tagline: 'جاهزة لطلب التأشيرة.',
+    tag: 'أضف صورك: يجد الوجه تلقائيًا، ويقصّها بدقة المليمتر، ويرتّبها على ورقة للطباعة. لا شيء يغادر جهازك.',
+    ring: 'أفلِت صورك هنا ✦ اسحب أو انقر ✦ ',
+    ticker: ['من الذقن إلى قمة الرأس 32–36 مم', '35 × 45 مم', 'خلفية فاتحة سادة', 'تعبير محايد · فم مغلق', 'عينان مفتوحتان · انظر إلى الكاميرا', 'خلال آخر 6 أشهر', 'بلا ظلال · بلا انعكاس', 'طباعة 300 DPI'],
+    secCheck: 'الفحص', secCheckSub: 'اسحب · حرّك · اضبط',
+    ppHead: 'صورة التأشيرة', fHead: 'ارتفاع الرأس', fCrown: 'الهامش العلوي', fTarget: 'المطلوب', fSize: 'المقاس', fMethod: 'طريقة القياس', fDate: 'التاريخ',
+    mWait: 'بانتظار صورة', mNoFace: 'لم يُعثر على وجه — اضبط يدويًا على الخطين الأزرق والأخضر',
+    mMask: 'قمة الرأس من قناع الشعر، والذقن من نقاط الوجه', mEst: 'قمة الرأس تقديرية — قارنها بالخط الأزرق',
+    empty1: 'لا صورة', empty2: 'انقر أو أفلِت', lgCrown: 'قمة الرأس', lgChin: 'الذقن', lgAxis: 'المحور',
+    stOk: 'مقبول', stOkSub: 'المقاسات صحيحة', stBad: 'يحتاج ضبطًا', stBadSub: 'اضبط على الخطوط',
+    zoom: 'تكبير', rotate: 'تدوير', removeBg: 'استبدال الخلفية', bgColor: 'لون الخلفية', white: 'أبيض', grey: 'رمادي فاتح',
+    auto: '↻ ضبط تلقائي', single: '↓ صورة واحدة', add: '+ إضافة', removePhoto: 'حذف الصورة',
+    note: '<b>اسحب</b> الصورة لتحريكها. <b>عجلة الفأرة</b> للتكبير. أعلى الشعر على الخط <b>الأزرق</b> والذقن داخل الشريط <b>الأخضر</b>. الختم الأحمر يعني أن كل شيء صحيح.',
+    secPrint: 'الطباعة', secPrintSub: 'طازجة من الطابعة',
+    paper: 'الورق', capacity: 'صورة في الورقة الواحدة', copies: 'عدد النسخ', fillEven: 'املأ الورقة بالتساوي',
+    total: 'المجموع {n} صورة · {p} ورقة', cut: 'خطوط القص',
+    dl: '↓ تنزيل ملف الطباعة', dlN: '↓ تنزيل {p} ملفات طباعة', print: '⎙ طباعة', noPhotos: 'أضف صورة أولًا',
+    printNote: 'ملف JPG بدقة 300 DPI مع المقاس الحقيقي — اطبعه في استوديو التصوير بمقاس الورق المختار. عند الطباعة في المنزل اختر <b>100% / الحجم الفعلي</b> وليس «ملاءمة للصفحة».',
+    hover: 'معاينة · بالنسب الحقيقية', pages: '{p} ورقة',
+    secRules: 'الشروط', secRulesSub: 'كي لا ترفضها القنصلية',
+    rules: [['35 × 45 مم، ملوّنة', 'مُلتقطة خلال آخر 6 أشهر'], ['من الذقن إلى قمة الرأس 32–36 مم', 'الوجه يملأ 70–80٪ من الصورة'], ['خلفية فاتحة سادة', 'بيضاء أو رمادية فاتحة، بلا ظلال'], ['نظرة مستقيمة وفم مغلق', 'تعبير محايد وعينان مفتوحتان'], ['بلا نظارات وبلا انعكاس', 'إن وُجدت فلا يغطي الإطار العينين'], ['الوجه ظاهر بالكامل', 'غطاء الرأس لأسباب دينية فقط'], ['بلا فلاتر وبلا تعديل', 'صورة واضحة ولون بشرة طبيعي']],
+    foot1: 'بلا خادم · بلا رفع · كل شيء يعمل في متصفحك', foot2: '35×45 · طلب التأشيرة',
+    sLoading: 'جارٍ تحميل نموذج كشف الوجه…', sReady: 'جاهز. أضف صورة.', sModelReady: 'النموذج جاهز.',
+    sModelFail: 'تعذّر تحميل كشف الوجه (لا اتصال؟). يمكنك الضبط يدويًا.', sDetecting: 'جارٍ كشف الوجه…',
+    sFound: 'تم العثور على الوجه وضبطه تلقائيًا. عدّل إن لزم.', sNoFace: 'لم يُعثر على وجه. اضبط يدويًا.',
+    sNoModel: 'النموذج غير جاهز بعد؛ يمكنك الضبط يدويًا.', sBgNoModel: 'نموذج الخلفية غير جاهز بعد.',
+    sBgWorking: 'جارٍ فصل الخلفية…', sBgDone: 'تم استبدال الخلفية. تحقّق من أطراف الشعر.',
+    sAdded: 'أُضيفت {n} صورة.',
+  },
+  fa: {
+    title: 'عکس ویزا 35×45', drop: 'رها کن!',
+    live: 'باجه درخواست باز است', heroRight: 'عکس بیومتریک · شینگن',
+    tagline: 'آماده برای درخواست ویزا.',
+    tag: 'عکس‌هایت را بینداز: چهره را پیدا می‌کند، با دقت میلی‌متر برش می‌دهد و برای چاپ می‌چیند. هیچ چیزی از دستگاهت خارج نمی‌شود.',
+    ring: 'عکس‌هایت را اینجا رها کن ✦ بکش یا کلیک کن ✦ ',
+    ticker: ['چانه تا فرق سر 32–36 میلی‌متر', '35 × 45 میلی‌متر', 'پس‌زمینه روشن و یکدست', 'چهره خنثی · دهان بسته', 'چشم‌ها باز · نگاه به دوربین', 'حداکثر 6 ماه اخیر', 'بدون سایه · بدون بازتاب', 'چاپ 300 DPI'],
+    secCheck: 'بررسی', secCheckSub: 'بکش · جابه‌جا کن · تنظیم کن',
+    ppHead: 'عکس ویزا', fHead: 'ارتفاع سر', fCrown: 'فاصله از بالا', fTarget: 'استاندارد', fSize: 'اندازه', fMethod: 'روش اندازه‌گیری', fDate: 'تاریخ',
+    mWait: 'در انتظار عکس', mNoFace: 'چهره‌ای پیدا نشد — دستی با خطوط آبی و سبز تنظیم کن',
+    mMask: 'فرق سر از ماسک مو، چانه از نقاط چهره', mEst: 'فرق سر تخمینی است — با خط آبی چک کن',
+    empty1: 'بدون عکس', empty2: 'کلیک کن یا رها کن', lgCrown: 'فرق سر', lgChin: 'چانه', lgAxis: 'محور',
+    stOk: 'تأیید شد', stOkSub: 'اندازه‌ها درست است', stBad: 'تنظیم لازم', stBadSub: 'با خطوط هم‌تراز کن',
+    zoom: 'بزرگ‌نمایی', rotate: 'چرخش', removeBg: 'تعویض پس‌زمینه', bgColor: 'رنگ پس‌زمینه', white: 'سفید', grey: 'خاکستری روشن',
+    auto: '↻ تنظیم خودکار', single: '↓ یک عکس', add: '+ افزودن', removePhoto: 'حذف عکس',
+    note: 'عکس را <b>بکش</b> تا جابه‌جا شود. با <b>چرخ ماوس</b> بزرگ‌نمایی کن. بالای مو روی خط <b>آبی</b> و چانه داخل نوار <b>سبز</b> باشد. مهر قرمز یعنی همه چیز درست است.',
+    secPrint: 'چاپ', secPrintSub: 'تازه از چاپگر',
+    paper: 'کاغذ', capacity: 'عکس در هر برگه', copies: 'تعداد', fillEven: 'برگه را یکسان پر کن',
+    total: 'مجموع {n} عکس · {p} برگه', cut: 'خطوط برش',
+    dl: '↓ دانلود فایل چاپ', dlN: '↓ دانلود {p} فایل چاپ', print: '⎙ چاپ', noPhotos: 'اول یک عکس اضافه کن',
+    printNote: 'فایل JPG با 300 DPI و اندازه واقعی — به عکاسی بده تا در اندازه کاغذ انتخابی چاپ کند. در خانه مقیاس را <b>100٪ / اندازه واقعی</b> بگذار، نه «متناسب با صفحه».',
+    hover: 'پیش‌نمایش · نسبت‌های واقعی', pages: '{p} برگه',
+    secRules: 'قوانین', secRulesSub: 'تا سفارت برنگرداند',
+    rules: [['35 × 45 میلی‌متر، رنگی', 'گرفته‌شده در 6 ماه اخیر'], ['چانه تا فرق سر 32–36 میلی‌متر', 'چهره 70 تا 80 درصد عکس را پر کند'], ['پس‌زمینه روشن و یکدست', 'سفید یا خاکستری روشن، بدون سایه'], ['نگاه مستقیم، دهان بسته', 'حالت خنثی، چشم‌ها باز و واضح'], ['بدون عینک، بدون بازتاب', 'اگر عینک داری، قاب چشم را نپوشاند'], ['چهره کاملاً پیدا', 'پوشش سر فقط به دلایل مذهبی'], ['بدون فیلتر، بدون روتوش', 'واضح، با رنگ پوست طبیعی']],
+    foot1: 'بدون سرور · بدون آپلود · همه چیز در مرورگر تو', foot2: '35×45 · درخواست ویزا',
+    sLoading: 'در حال بارگذاری مدل تشخیص چهره…', sReady: 'آماده. یک عکس اضافه کن.', sModelReady: 'مدل آماده است.',
+    sModelFail: 'تشخیص چهره بارگذاری نشد (اینترنت؟). می‌توانی دستی تنظیم کنی.', sDetecting: 'در حال تشخیص چهره…',
+    sFound: 'چهره پیدا و خودکار تنظیم شد. در صورت نیاز دقیق‌ترش کن.', sNoFace: 'چهره‌ای پیدا نشد. دستی تنظیم کن.',
+    sNoModel: 'مدل هنوز آماده نیست؛ می‌توانی دستی تنظیم کنی.', sBgNoModel: 'مدل پس‌زمینه هنوز آماده نیست.',
+    sBgWorking: 'در حال جدا کردن پس‌زمینه…', sBgDone: 'پس‌زمینه عوض شد. لبه‌های مو را چک کن.',
+    sAdded: '{n} عکس اضافه شد.',
+  },
+  zh: {
+    title: '签证照片 35×45', drop: '松手！',
+    live: '申请窗口开放中', heroRight: '生物识别照片 · 申根',
+    tagline: '签证申请，一步到位。',
+    tag: '拖入照片：自动识别人脸，精确到毫米裁切，并排版打印。所有处理都在你的设备上完成。',
+    ring: '把照片拖到这里 ✦ 拖放或点击 ✦ ',
+    ticker: ['下巴 → 头顶 32–36 毫米', '35 × 45 毫米', '浅色纯色背景', '表情自然 · 嘴巴闭合', '睁眼 · 直视镜头', '近 6 个月内拍摄', '无阴影 · 无反光', '300 DPI 打印'],
+    secCheck: '检查', secCheckSub: '拖动 · 移动 · 微调',
+    ppHead: '签证照片', fHead: '头部高度', fCrown: '顶部留白', fTarget: '标准', fSize: '尺寸', fMethod: '测量方式', fDate: '日期',
+    mWait: '等待照片', mNoFace: '未检测到人脸 — 请按蓝线和绿线手动对齐',
+    mMask: '头顶取自头发蒙版，下巴取自面部特征点', mEst: '头顶为估算值 — 请对照蓝线检查',
+    empty1: '无照片', empty2: '点击或拖入', lgCrown: '头顶', lgChin: '下巴', lgAxis: '中轴',
+    stOk: '已批准', stOkSub: '尺寸合格', stBad: '需调整', stBadSub: '请对齐参考线',
+    zoom: '缩放', rotate: '旋转', removeBg: '替换背景', bgColor: '背景颜色', white: '白色', grey: '浅灰',
+    auto: '↻ 自动对齐', single: '↓ 单张照片', add: '+ 添加', removePhoto: '移除照片',
+    note: '<b>拖动</b>照片调整位置，<b>滚轮</b>缩放。头发顶部对准<b>蓝</b>线，下巴落在<b>绿</b>色区域内。盖上红章即为合格。',
+    secPrint: '打印', secPrintSub: '刚从打印机出来',
+    paper: '纸张', capacity: '张 · 每页可放', copies: '数量', fillEven: '平均铺满整页',
+    total: '共 {n} 张 · {p} 页', cut: '裁切线',
+    dl: '↓ 下载打印文件', dlN: '↓ 下载 {p} 个打印文件', print: '⎙ 打印', noPhotos: '请先添加照片',
+    printNote: '300 DPI 的 JPG，已写入实际尺寸 — 交给冲印店按所选纸张尺寸冲印。在家打印时请选择 <b>100% / 实际大小</b>，不要“适应页面”。',
+    hover: '预览 · 真实比例', pages: '{p} 页',
+    secRules: '要求', secRulesSub: '免得被领事馆退回',
+    rules: [['35 × 45 毫米，彩色', '近 6 个月内拍摄'], ['下巴到头顶 32–36 毫米', '面部占照片的 70–80%'], ['浅色纯色背景', '白色或浅灰，无阴影'], ['直视镜头，嘴巴闭合', '表情自然，双眼睁开清晰'], ['不戴眼镜，无反光', '如戴眼镜，镜框不得遮挡眼睛'], ['面部完全露出', '仅因宗教原因可佩戴头饰'], ['无滤镜，无修图', '清晰锐利，肤色自然']],
+    foot1: '无服务器 · 不上传 · 全部在浏览器中运行', foot2: '35×45 · 签证申请',
+    sLoading: '正在加载人脸识别模型…', sReady: '准备就绪，请添加照片。', sModelReady: '模型已就绪。',
+    sModelFail: '人脸识别加载失败（网络问题？），仍可手动对齐。', sDetecting: '正在识别人脸…',
+    sFound: '已识别人脸并自动对齐，可按需微调。', sNoFace: '未检测到人脸，请手动对齐。',
+    sNoModel: '模型尚未就绪，可先手动对齐。', sBgNoModel: '背景模型尚未就绪。',
+    sBgWorking: '正在分离背景…', sBgDone: '背景已替换，请检查发丝边缘。',
+    sAdded: '已添加 {n} 张照片。',
   },
 };
 const LANGS = Object.keys(I18N);
+const RTL = ['ar', 'fa'];
+const LANG_NAMES = { tr: 'TR', en: 'EN', ru: 'RU', ar: 'عربي', fa: 'فارسی', zh: '中文' };
 let lang = (() => {
   try { const s = localStorage.getItem('lang'); if (LANGS.includes(s)) return s; } catch {}
   const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
@@ -462,14 +589,19 @@ function setStatus(key, vars) { statusKey = [key, vars]; $('status').textContent
 
 function applyI18n() {
   document.documentElement.lang = lang;
+  document.documentElement.dir = RTL.includes(lang) ? 'rtl' : 'ltr';
   document.title = t('title');
   document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
   document.querySelectorAll('[data-i18n-html]').forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
-  $('ring').textContent = t('ring');
+  // Spacing glyphs out along the circle breaks Arabic/Persian letter joining,
+  // so RTL scripts repeat the phrase instead of stretching it.
+  const ring = $('ring');
+  if (RTL.includes(lang)) { ring.removeAttribute('textLength'); ring.textContent = t('ring').repeat(2); }
+  else { ring.setAttribute('textLength', '512'); ring.textContent = t('ring'); }
   const tick = t('ticker').join('<b>✦</b>') + '<b>✦</b>';
   $('ticker').innerHTML = tick + tick;
   $('rules').innerHTML = t('rules').map(([a, b]) => `<li>${a}<span>${b}</span></li>`).join('');
-  $('langs').innerHTML = LANGS.map(l => `<button data-l="${l}" class="${l === lang ? 'on' : ''}">${l.toUpperCase()}</button>`).join('');
+  $('langs').innerHTML = LANGS.map(l => `<button data-l="${l}" class="${l === lang ? 'on' : ''}">${LANG_NAMES[l]}</button>`).join('');
   $('status').textContent = t(...statusKey);
   $('drop').setAttribute('aria-label', t('ring'));
   lastStamp = undefined;
@@ -905,11 +1037,11 @@ function fillEven() {
   let extra = Math.max(0, cap - each * photos.length);
   photos.forEach(p => { p.copies = each + (extra-- > 0 ? 1 : 0); });
   renderCopies();
-  scheduleSheet();
+  feed();
 }
 $('fillEven').onclick = fillEven;
 $('paper').onchange = fillEven;
-$('cutLines').onchange = () => scheduleSheet();
+$('cutLines').onchange = () => feed();
 
 function renderCopies() {
   const box = $('copies');
@@ -922,7 +1054,7 @@ function renderCopies() {
     row.insertAdjacentHTML('beforeend', `<span class="lbl">#${String(i + 1).padStart(2, '0')}</span>
       <span class="stepper"><button data-d="-1" aria-label="−">−</button><input type="number" min="0" max="99" value="${p.copies}"><button data-d="1" aria-label="+">+</button></span>`);
     const input = row.querySelector('input');
-    const setN = n => { p.copies = Math.max(0, Math.min(99, n | 0)); input.value = p.copies; scheduleSheet(); };
+    const setN = n => { p.copies = Math.max(0, Math.min(99, n | 0)); input.value = p.copies; feed(); };
     row.querySelectorAll('button').forEach(b => b.onclick = () => setN(p.copies + +b.dataset.d));
     input.onchange = () => setN(+input.value);
     box.append(row);
@@ -951,12 +1083,17 @@ function buildSheets() {
   const cache = new Map();
   const box = $('sheets');
   while (box.children.length > nPages) box.lastChild.remove();
-  while (box.children.length < nPages) box.append(document.createElement('canvas'));
-  pages = [...box.children];
+  while (box.children.length < nPages) {
+    const page = document.createElement('div');
+    page.className = 'page';
+    page.append(document.createElement('canvas'));
+    box.append(page);
+  }
+  pages = [...box.querySelectorAll('canvas')];
 
   pages.forEach((sheet, pi) => {
     sheet.width = Math.round(L.W * PX_MM); sheet.height = Math.round(L.H * PX_MM);
-    sheet.classList.toggle('portrait', L.H > L.W);
+    sheet.parentNode.classList.toggle('portrait', L.H > L.W);
     const ctx = sheet.getContext('2d');
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, sheet.width, sheet.height);
     ctx.imageSmoothingQuality = 'high';
@@ -980,7 +1117,16 @@ function buildSheets() {
   const ready = slots.length > 0;
   $('dlSheet').disabled = $('printSheet').disabled = !ready;
   $('dlSheet').textContent = nPages > 1 ? t('dlN', { p: nPages }) : t('dl');
+  if (feedNext && ready) {
+    feedNext = false;
+    const pr = $('printer');
+    pr.classList.remove('feeding'); void pr.offsetWidth; pr.classList.add('feeding');
+    clearTimeout(feedTimer); feedTimer = setTimeout(() => pr.classList.remove('feeding'), 3800);
+  }
 }
+// The print-out animation plays when the layout changes, not on every nudge in the editor.
+let feedNext = true, feedTimer = null;
+function feed() { feedNext = true; scheduleSheet(); }
 
 // JPEG with real DPI in the JFIF header so print shops print at true size.
 async function jpegWithDpi(canvas, dpi) {
