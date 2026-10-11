@@ -227,16 +227,10 @@
     background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.55) 47%, rgba(255,255,255,.15) 53%, transparent 62%) no-repeat;
     background-size: 300% 100%; background-position: 100% 0; mix-blend-mode: soft-light; }
   .page::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(0,0,0,.18), transparent 12%); }
-  .printer.feeding .page:first-child { animation: feed 2.4s linear both; }
-  .printer.feeding .page:not(:first-child) { animation: fadein .5s 2.2s both; }
-  .printer.feeding .page::after { animation: sheen 1.4s 2.3s ease-out both; }
-  @keyframes feed {
-    0% { transform: translateY(-100%); } 14% { transform: translateY(-84%); } 22% { transform: translateY(-84%); }
-    38% { transform: translateY(-60%); } 46% { transform: translateY(-60%); } 62% { transform: translateY(-34%); }
-    70% { transform: translateY(-34%); } 92% { transform: translateY(0); } 96% { transform: translateY(-1.2%); } 100% { transform: translateY(0); }
-  }
-  @keyframes fadein { from { opacity: 0; transform: translateY(-12px); } }
-  @keyframes sheen { from { background-position: 100% 0; } to { background-position: 0 0; } }
+  /* --p (0 → 1) is driven by scroll: the sheet slides out of the slot as you scroll down */
+  .printer .page:first-child { transform: translateY(calc((var(--p, 1) - 1) * 100%)); will-change: transform; }
+  .printer .page:not(:first-child) { opacity: var(--rest, 1); transform: translateY(calc((1 - var(--rest, 1)) * -16px)); }
+  .printer .page::after { background-position: calc((1 - var(--sheen, 1)) * 100%) 0; }
 
   /* ---------- RTL / script tweaks ---------- */
   .ticker, .mrz, input[type=range], .stepper, .thumb .n, .mega, .disc svg { direction: ltr; }
@@ -1037,11 +1031,11 @@ function fillEven() {
   let extra = Math.max(0, cap - each * photos.length);
   photos.forEach(p => { p.copies = each + (extra-- > 0 ? 1 : 0); });
   renderCopies();
-  feed();
+  scheduleSheet();
 }
 $('fillEven').onclick = fillEven;
 $('paper').onchange = fillEven;
-$('cutLines').onchange = () => feed();
+$('cutLines').onchange = () => scheduleSheet();
 
 function renderCopies() {
   const box = $('copies');
@@ -1054,7 +1048,7 @@ function renderCopies() {
     row.insertAdjacentHTML('beforeend', `<span class="lbl">#${String(i + 1).padStart(2, '0')}</span>
       <span class="stepper"><button data-d="-1" aria-label="−">−</button><input type="number" min="0" max="99" value="${p.copies}"><button data-d="1" aria-label="+">+</button></span>`);
     const input = row.querySelector('input');
-    const setN = n => { p.copies = Math.max(0, Math.min(99, n | 0)); input.value = p.copies; feed(); };
+    const setN = n => { p.copies = Math.max(0, Math.min(99, n | 0)); input.value = p.copies; scheduleSheet(); };
     row.querySelectorAll('button').forEach(b => b.onclick = () => setN(p.copies + +b.dataset.d));
     input.onchange = () => setN(+input.value);
     box.append(row);
@@ -1117,16 +1111,29 @@ function buildSheets() {
   const ready = slots.length > 0;
   $('dlSheet').disabled = $('printSheet').disabled = !ready;
   $('dlSheet').textContent = nPages > 1 ? t('dlN', { p: nPages }) : t('dl');
-  if (feedNext && ready) {
-    feedNext = false;
-    const pr = $('printer');
-    pr.classList.remove('feeding'); void pr.offsetWidth; pr.classList.add('feeding');
-    clearTimeout(feedTimer); feedTimer = setTimeout(() => pr.classList.remove('feeding'), 3800);
-  }
+  updatePrintout();
 }
-// The print-out animation plays when the layout changes, not on every nudge in the editor.
-let feedNext = true, feedTimer = null;
-function feed() { feedNext = true; scheduleSheet(); }
+
+// Tie the print-out to scroll position: the sheet emerges from the slot while
+// the printer travels up through the viewport, and slides back in on scroll up.
+const printer = $('printer');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let printoutFrame = 0;
+function updatePrintout() {
+  printoutFrame = 0;
+  const vh = innerHeight;
+  const top = printer.getBoundingClientRect().top;
+  // starts when the printer is at 85% of the viewport, done when it reaches 25%
+  const p = reduceMotion ? 1 : Math.min(1, Math.max(0, (vh * 0.85 - top) / (vh * 0.6)));
+  const seg = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+  printer.style.setProperty('--p', seg(0, 0.85));
+  printer.style.setProperty('--sheen', seg(0.75, 1));
+  printer.style.setProperty('--rest', seg(0.85, 1));
+  printer.classList.toggle('feeding', p > 0 && p < 0.85);
+}
+const queuePrintout = () => { if (!printoutFrame) printoutFrame = requestAnimationFrame(updatePrintout); };
+addEventListener('scroll', queuePrintout, { passive: true });
+addEventListener('resize', queuePrintout);
 
 // JPEG with real DPI in the JFIF header so print shops print at true size.
 async function jpegWithDpi(canvas, dpi) {
