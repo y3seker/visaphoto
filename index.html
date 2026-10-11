@@ -96,12 +96,22 @@
   .field { border-bottom: 1px dotted rgba(0,0,0,.3); padding-bottom: 6px; }
   .field.wide { grid-column: span 2; }
   .field span { display: block; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(0,0,0,.5); }
-  .field b { font: 400 26px/1.1 var(--display); letter-spacing: .02em; }
+  .field b { font: 400 26px/1.1 var(--display); letter-spacing: .02em; unicode-bidi: plaintext; }
   .field b.ok { color: #0d7a3e; } .field b.bad { color: #c62a12; }
   .field em { font: italic 17px var(--serif); }
+  .checks-wrap { margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,.2); }
+  .checks-title { display: block; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(0,0,0,.5); margin-bottom: 8px; }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px 12px; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; }
+  .checks li { display: flex; align-items: center; gap: 7px; color: rgba(0,0,0,.72); }
+  .checks li::before { content: '–'; width: 15px; height: 15px; flex: none; display: inline-grid; place-items: center; border-radius: 50%; font: 700 10px/1 var(--mono); background: rgba(0,0,0,.12); color: rgba(0,0,0,.6); }
+  .checks li.ok::before { content: '✓'; background: #0d7a3e; color: #fff; }
+  .checks li.bad { color: #c62a12; font-weight: 700; }
+  .checks li.bad::before { content: '!'; background: #c62a12; color: #fff; }
+  .check-hint { margin: 10px 0 0; font: italic 16px/1.3 var(--serif); color: #c62a12; }
+  .check-hint:empty { display: none; }
   .mrz { margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,.2); font: 700 clamp(9px, 1.45vw, 13px)/1.6 var(--mono); letter-spacing: .14em; white-space: pre; overflow: hidden; color: #2a2823; }
 
-  .stamp { position: absolute; inset-inline-end: 6%; bottom: 22%; padding: 10px 18px; border: 4px double currentColor; border-radius: 10px; text-align: center; transform: rotate(-14deg) scale(1); pointer-events: none; mix-blend-mode: multiply; opacity: 0; font-family: var(--display); text-transform: uppercase; }
+  .stamp { position: absolute; inset-inline-end: 6%; top: 36%; padding: 10px 18px; border: 4px double currentColor; border-radius: 10px; text-align: center; transform: rotate(-14deg) scale(1); pointer-events: none; mix-blend-mode: multiply; opacity: 0; font-family: var(--display); text-transform: uppercase; }
   .stamp b { display: block; font-weight: 400; font-size: clamp(30px, 4vw, 48px); line-height: 1; letter-spacing: .04em; }
   .stamp small { display: block; font: 700 9px var(--mono); letter-spacing: .25em; margin-top: 4px; }
   .stamp.ok { color: rgba(205,34,10,.85); opacity: 1; animation: stamp .45s cubic-bezier(.3,1.4,.5,1) both; }
@@ -167,10 +177,11 @@
     .desk, .print { grid-template-columns: 1fr; }
     .passport { transform: none; padding: 16px; }
     .pp-body { grid-template-columns: 1fr; }
+    .checks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .slot { max-width: 260px; }
     .rules li { grid-template-columns: 44px 1fr; }
     .rules li span { grid-column: 2; text-align: start; }
-    .stamp { inset-inline-end: 4%; bottom: 30%; }
+    .stamp { inset-inline-end: 4%; top: 30%; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
@@ -188,6 +199,7 @@
   .thumb:hover { transform: translateY(-3px) rotate(-2deg); }
   .thumb.on { outline: 2px solid var(--acid); }
   .thumb .n { position: absolute; left: -8px; top: -8px; background: var(--red); color: var(--ink); font: 700 10px var(--mono); padding: 2px 5px; }
+  .thumb .warn { position: absolute; left: -8px; bottom: -8px; width: 18px; height: 18px; border-radius: 50%; background: #f59e0b; color: var(--ink); font: 700 11px/18px var(--mono); text-align: center; }
   .thumb .x { position: absolute; right: -9px; top: -9px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: var(--bone); color: var(--ink); font: 700 12px/20px var(--mono); padding: 0; cursor: pointer; opacity: 0; transition: opacity .15s; }
   .thumb:hover .x, .thumb:focus-within .x { opacity: 1; }
   .thumb.add { background: transparent; outline: 1px dashed var(--mute); color: var(--bone); font: 700 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
@@ -290,6 +302,11 @@
           <div class="field wide"><span data-i18n="fMethod"></span><em id="mSrc"></em></div>
           <div class="field wide"><span data-i18n="fDate"></span><b id="mDate">—</b></div>
         </div>
+      </div>
+      <div class="checks-wrap">
+        <span class="checks-title" data-i18n="checksTitle"></span>
+        <ul class="checks" id="checks"></ul>
+        <p class="check-hint" id="checkHint"></p>
       </div>
       <div class="mrz" id="mrz"></div>
       <div class="stamp" id="stamp"><b id="stampTxt"></b><small id="stampSub"></small></div>
@@ -399,6 +416,7 @@ const I18N = {
     sNoModel: 'Model henüz hazır değil; elle hizalayabilirsin.', sBgNoModel: 'Arka plan modeli hazır değil.',
     sBgWorking: 'Arka plan ayrıştırılıyor…', sBgDone: 'Arka plan değiştirildi. Saç kenarlarını kontrol et.',
     sAdded: '{n} fotoğraf eklendi.',
+    checksTitle: 'Uygunluk', checksPending: 'model yüklenince kontrol edilecek', stCheckSub: 'KONTROL LİSTESİNE BAK', cEyes: 'Gözler açık', hEyes: 'Gözler kapalı ya da kısık görünüyor.', cMouth: 'Ağız kapalı', hMouth: 'Ağız açık görünüyor; dudaklar kapalı olmalı.', cSmile: 'Nötr ifade', hSmile: 'Belirgin bir gülümseme var; nötr ifade gerekli.', cPose: 'Baş düz', hPose: 'Baş yana dönük ya da eğik; kameraya tam karşıdan bak.', cLight: 'Pozlama', hLight: 'Yüz çok karanlık ya da çok parlak.', cShadow: 'Eşit ışık', hShadow: 'Yüzün bir yarısı gölgede; ışığı önden ver.', cSharp: 'Netlik', hSharp: 'Fotoğraf bulanık; daha net bir kare kullan.', cRes: 'Çözünürlük', hRes: 'Yüz çok küçük; baskı için daha yüksek çözünürlüklü fotoğraf gerekli.', cBg: 'Arka plan', hBg: 'Arka plan koyu ya da karışık; "Arka planı sil"i aç.',
   },
   en: {
     title: 'Visa Photo 35×45', drop: 'DROP!',
@@ -431,6 +449,7 @@ const I18N = {
     sNoModel: 'Model not ready yet; you can align manually.', sBgNoModel: 'Background model not ready.',
     sBgWorking: 'Separating background…', sBgDone: 'Background replaced. Check the hair edges.',
     sAdded: '{n} photo(s) added.',
+    checksTitle: 'Compliance', checksPending: 'checked once the model has loaded', stCheckSub: 'SEE THE CHECKLIST', cEyes: 'Eyes open', hEyes: 'Eyes look closed or squinting.', cMouth: 'Mouth closed', hMouth: 'Mouth looks open; keep your lips together.', cSmile: 'Neutral face', hSmile: 'Noticeable smile; a neutral expression is required.', cPose: 'Head straight', hPose: 'Head is turned or tilted; face the camera squarely.', cLight: 'Exposure', hLight: 'Face is too dark or too bright.', cShadow: 'Even light', hShadow: 'One side of the face is in shadow; light it from the front.', cSharp: 'Sharpness', hSharp: 'Photo is blurry; use a sharper shot.', cRes: 'Resolution', hRes: 'Face is too small; print needs a higher-resolution photo.', cBg: 'Background', hBg: 'Background is dark or busy; turn on "Replace background".',
   },
   ru: {
     title: 'Фото на визу 35×45', drop: 'БРОСАЙ!',
@@ -463,6 +482,7 @@ const I18N = {
     sNoModel: 'Модель ещё не готова; можно выровнять вручную.', sBgNoModel: 'Модель фона ещё не готова.',
     sBgWorking: 'Отделяем фон…', sBgDone: 'Фон заменён. Проверь края волос.',
     sAdded: 'Добавлено фото: {n}.',
+    checksTitle: 'Соответствие', checksPending: 'проверим, когда загрузится модель', stCheckSub: 'СМ. ЧЕК-ЛИСТ', cEyes: 'Глаза открыты', hEyes: 'Глаза кажутся закрытыми или прищуренными.', cMouth: 'Рот закрыт', hMouth: 'Рот приоткрыт; губы должны быть сомкнуты.', cSmile: 'Нейтральное лицо', hSmile: 'Заметна улыбка; нужно нейтральное выражение.', cPose: 'Голова прямо', hPose: 'Голова повёрнута или наклонена; смотри прямо в камеру.', cLight: 'Экспозиция', hLight: 'Лицо слишком тёмное или слишком светлое.', cShadow: 'Ровный свет', hShadow: 'Половина лица в тени; свет должен падать спереди.', cSharp: 'Резкость', hSharp: 'Фото размыто; нужен более чёткий кадр.', cRes: 'Разрешение', hRes: 'Лицо слишком мелкое; для печати нужно фото в большем разрешении.', cBg: 'Фон', hBg: 'Фон тёмный или пёстрый; включи «Заменить фон».',
   },
   ar: {
     title: 'صورة التأشيرة 35×45', drop: 'أفلِت!',
@@ -495,6 +515,7 @@ const I18N = {
     sNoModel: 'النموذج غير جاهز بعد؛ يمكنك الضبط يدويًا.', sBgNoModel: 'نموذج الخلفية غير جاهز بعد.',
     sBgWorking: 'جارٍ فصل الخلفية…', sBgDone: 'تم استبدال الخلفية. تحقّق من أطراف الشعر.',
     sAdded: 'أُضيفت {n} صورة.',
+    checksTitle: 'المطابقة', checksPending: 'سيتم الفحص بعد تحميل النموذج', stCheckSub: 'راجع قائمة الفحص', cEyes: 'العينان مفتوحتان', hEyes: 'تبدو العينان مغمضتين أو شبه مغمضتين.', cMouth: 'الفم مغلق', hMouth: 'يبدو الفم مفتوحًا؛ يجب إطباق الشفتين.', cSmile: 'تعبير محايد', hSmile: 'هناك ابتسامة واضحة؛ المطلوب تعبير محايد.', cPose: 'الرأس مستقيم', hPose: 'الرأس ملتفت أو مائل؛ انظر إلى الكاميرا مباشرة.', cLight: 'الإضاءة', hLight: 'الوجه مظلم جدًا أو ساطع جدًا.', cShadow: 'إضاءة متساوية', hShadow: 'نصف الوجه في الظل؛ اجعل الضوء من الأمام.', cSharp: 'الوضوح', hSharp: 'الصورة ضبابية؛ استخدم لقطة أوضح.', cRes: 'الدقة', hRes: 'الوجه صغير جدًا؛ تحتاج الطباعة إلى صورة بدقة أعلى.', cBg: 'الخلفية', hBg: 'الخلفية داكنة أو مزدحمة؛ فعّل «استبدال الخلفية».',
   },
   fa: {
     title: 'عکس ویزا 35×45', drop: 'رها کن!',
@@ -527,6 +548,7 @@ const I18N = {
     sNoModel: 'مدل هنوز آماده نیست؛ می‌توانی دستی تنظیم کنی.', sBgNoModel: 'مدل پس‌زمینه هنوز آماده نیست.',
     sBgWorking: 'در حال جدا کردن پس‌زمینه…', sBgDone: 'پس‌زمینه عوض شد. لبه‌های مو را چک کن.',
     sAdded: '{n} عکس اضافه شد.',
+    checksTitle: 'انطباق', checksPending: 'پس از بارگذاری مدل بررسی می‌شود', stCheckSub: 'فهرست بررسی را ببین', cEyes: 'چشم‌ها باز', hEyes: 'چشم‌ها بسته یا نیمه‌باز به نظر می‌رسند.', cMouth: 'دهان بسته', hMouth: 'دهان باز به نظر می‌رسد؛ لب‌ها باید بسته باشند.', cSmile: 'حالت خنثی', hSmile: 'لبخند واضح است؛ حالت چهره باید خنثی باشد.', cPose: 'سر صاف', hPose: 'سر چرخیده یا کج است؛ مستقیم به دوربین نگاه کن.', cLight: 'نوردهی', hLight: 'چهره خیلی تاریک یا خیلی روشن است.', cShadow: 'نور یکنواخت', hShadow: 'نیمی از چهره در سایه است؛ نور را از روبه‌رو بده.', cSharp: 'وضوح', hSharp: 'عکس تار است؛ از عکس واضح‌تری استفاده کن.', cRes: 'رزولوشن', hRes: 'چهره خیلی کوچک است؛ برای چاپ عکس با کیفیت بالاتر لازم است.', cBg: 'پس‌زمینه', hBg: 'پس‌زمینه تیره یا شلوغ است؛ «تعویض پس‌زمینه» را روشن کن.',
   },
   zh: {
     title: '签证照片 35×45', drop: '松手！',
@@ -559,6 +581,7 @@ const I18N = {
     sNoModel: '模型尚未就绪，可先手动对齐。', sBgNoModel: '背景模型尚未就绪。',
     sBgWorking: '正在分离背景…', sBgDone: '背景已替换，请检查发丝边缘。',
     sAdded: '已添加 {n} 张照片。',
+    checksTitle: '合规检查', checksPending: '模型加载后进行检查', stCheckSub: '请查看检查清单', cEyes: '双眼睁开', hEyes: '眼睛看起来闭着或眯着。', cMouth: '嘴巴闭合', hMouth: '嘴巴微张，请合上双唇。', cSmile: '表情自然', hSmile: '笑容明显，需要自然中性的表情。', cPose: '头部端正', hPose: '头部偏转或倾斜，请正对镜头。', cLight: '曝光', hLight: '面部过暗或过亮。', cShadow: '光线均匀', hShadow: '半边脸在阴影中，请从正面打光。', cSharp: '清晰度', hSharp: '照片模糊，请换一张更清晰的。', cRes: '分辨率', hRes: '面部太小，打印需要更高分辨率的照片。', cBg: '背景', hBg: '背景偏暗或杂乱，请打开“替换背景”。',
   },
 };
 const LANGS = Object.keys(I18N);
@@ -627,6 +650,7 @@ async function loadModels() {
     landmarker = await FaceLandmarker.createFromOptions(vision, {
       baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task' },
       runningMode: 'IMAGE', numFaces: 1,
+      outputFaceBlendshapes: true, outputFacialTransformationMatrixes: true,
     });
     segmenter = await ImageSegmenter.createFromOptions(vision, {
       baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite' },
@@ -719,10 +743,17 @@ function select(p) {
 function analyze(p) {
   if (landmarker) {
     setStatus('sDetecting');
-    const lm = landmarker.detect(p.src).faceLandmarks?.[0];
+    const res = landmarker.detect(p.src);
+    const lm = res.faceLandmarks?.[0];
     if (lm) {
       const P = i => ({ x: lm[i].x * p.src.width, y: lm[i].y * p.src.height });
-      p.face = { eyeL: P(33), eyeR: P(263), chin: P(152), top: P(10) };
+      const xs = lm.map(q => q.x * p.src.width), ys = lm.map(q => q.y * p.src.height);
+      p.face = {
+        eyeL: P(33), eyeR: P(263), chin: P(152), top: P(10),
+        box: { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) },
+        blend: Object.fromEntries((res.faceBlendshapes?.[0]?.categories || []).map(c => [c.categoryName, c.score])),
+        matrix: res.facialTransformationMatrixes?.[0]?.data || null,
+      };
       setStatus('sFound');
     } else {
       p.face = null;
@@ -732,8 +763,105 @@ function analyze(p) {
     setStatus('sNoModel');
   }
   autoFit(p);
+  p.checks = p.face ? measure(p) : null;
   if (p.whiteBg) buildBackground(p);
 }
+
+// ---------- compliance checks ----------
+// Blendshape scores are 0..1, angles in degrees, luminance 0..255.
+const LIMITS = {
+  blink: 0.5, jawOpen: 0.15, smile: 0.5,
+  yaw: 8, pitch: 12,
+  lumMin: 70, lumMax: 215, sideRatio: 0.72,
+  sharpness: 45,            // variance of the Laplacian on a 160 px wide face crop
+  minHeadPx: 330,           // ~34 mm head at 300 DPI is 400 px; allow mild upscaling
+  bgLumMin: 170, bgStdMax: 40,
+};
+const CHECKS = ['Eyes', 'Mouth', 'Smile', 'Pose', 'Light', 'Shadow', 'Sharp', 'Res', 'Bg'];
+
+// Raw measurements for one photo; pass/fail is decided in checksOf().
+function measure(p) {
+  const f = p.face, b = f.blend, m = {};
+  if (b.eyeBlinkLeft != null) {
+    m.blink = Math.max(b.eyeBlinkLeft, b.eyeBlinkRight);
+    m.jaw = b.jawOpen;
+    m.smile = (b.mouthSmileLeft + b.mouthSmileRight) / 2;
+  }
+  if (f.matrix) {
+    // Third column of the column-major 4x4 is the face's forward axis.
+    const [zx, zy, zz] = [f.matrix[8], f.matrix[9], f.matrix[10]];
+    m.yaw = Math.atan2(zx, zz) * 180 / Math.PI;
+    m.pitch = Math.atan2(zy, zz) * 180 / Math.PI;
+  }
+
+  // Luminance, left/right balance and sharpness on the inner face area.
+  const bx = f.box, w = bx.x1 - bx.x0, h = bx.y1 - bx.y0;
+  const sx = bx.x0 + w * 0.12, sy = bx.y0 + h * 0.12, sw = w * 0.76, sh = h * 0.76;
+  const W = 160, H = Math.max(8, Math.round(W * sh / sw));
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(p.src, sx, sy, sw, sh, 0, 0, W, H);
+  const px = ctx.getImageData(0, 0, W, H).data;
+  const g = new Float32Array(W * H);
+  let sum = 0, left = 0, right = 0;
+  for (let i = 0; i < W * H; i++) {
+    const v = 0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2];
+    g[i] = v; sum += v;
+    if (i % W < W / 2) left += v; else right += v;
+  }
+  m.lum = sum / (W * H);
+  m.side = Math.min(left, right) / Math.max(left, right);
+  let ls = 0, ls2 = 0, n = 0;
+  for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) {
+    const i = y * W + x;
+    const lap = 4 * g[i] - g[i - 1] - g[i + 1] - g[i - W] - g[i + W];
+    ls += lap; ls2 += lap * lap; n++;
+  }
+  // Normalised by brightness so a dim but sharp photo is not flagged as blurry.
+  m.sharp = (ls2 / n - (ls / n) ** 2) / Math.max(0.15, m.lum / 128) ** 2;
+  m.headPx = f.headPx;
+
+  // Background brightness/uniformity inside the auto crop, using the segmentation mask.
+  if (p.mask) {
+    const st = p.base, GW = 40, GH = 50, vals = [];
+    const x0 = st.cx - SPEC.w / 2 * st.s, y0 = st.cy - SPEC.h / 2 * st.s;
+    const gc = document.createElement('canvas'); gc.width = GW; gc.height = GH;
+    const gctx = gc.getContext('2d', { willReadFrequently: true });
+    gctx.drawImage(p.src, x0, y0, SPEC.w * st.s, SPEC.h * st.s, 0, 0, GW, GH);
+    const gd = gctx.getImageData(0, 0, GW, GH).data;
+    for (let j = 0; j < GH; j++) for (let i = 0; i < GW; i++) {
+      const x = x0 + (i + 0.5) / GW * SPEC.w * st.s, y = y0 + (j + 0.5) / GH * SPEC.h * st.s;
+      if (x < 0 || y < 0 || x >= p.src.width || y >= p.src.height || bgConf(p, x, y) < 0.8) continue;
+      const k = (j * GW + i) * 4;
+      vals.push(0.2126 * gd[k] + 0.7152 * gd[k + 1] + 0.0722 * gd[k + 2]);
+    }
+    if (vals.length >= 40) {
+      const mean = vals.reduce((a, v) => a + v, 0) / vals.length;
+      m.bgLum = mean;
+      m.bgStd = Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / vals.length);
+    }
+  }
+  return m;
+}
+
+// true = pass, false = fail, null = not measurable.
+function checksOf(p) {
+  const m = p?.checks;
+  if (!m) return null;
+  const has = v => v != null && !Number.isNaN(v);
+  return {
+    Eyes: has(m.blink) ? m.blink < LIMITS.blink : null,
+    Mouth: has(m.jaw) ? m.jaw < LIMITS.jawOpen : null,
+    Smile: has(m.smile) ? m.smile < LIMITS.smile : null,
+    Pose: has(m.yaw) ? Math.abs(m.yaw) <= LIMITS.yaw && Math.abs(m.pitch) <= LIMITS.pitch : null,
+    Light: m.lum >= LIMITS.lumMin && m.lum <= LIMITS.lumMax,
+    Shadow: m.side >= LIMITS.sideRatio,
+    Sharp: m.sharp >= LIMITS.sharpness,
+    Res: m.headPx >= LIMITS.minHeadPx,
+    Bg: p.whiteBg && p.bg ? true : has(m.bgLum) ? m.bgLum >= LIMITS.bgLumMin && m.bgStd <= LIMITS.bgStdMax : null,
+  };
+}
+const failing = p => { const c = checksOf(p); return c ? CHECKS.filter(k => c[k] === false) : []; };
 
 // ---------- geometry ----------
 function autoFit(p) {
@@ -837,17 +965,25 @@ function updateMetric() {
   const pad = (s, n = 44) => (s + '<'.repeat(n)).slice(0, n);
   const mm = v => v == null ? '<<<' : String(Math.round(v * 10)).padStart(3, '0');
   const ymd = d.toISOString().slice(2, 10).replace(/-/g, '');
-  $('mrz').textContent = pad('V<SCHGEN<<FOTOGRAF<<BIYOMETRIK') + '\n' + pad(`3545MM<<H${mm(head)}<C${mm(crown)}<<${ymd}<${okH && okC ? 'OK' : 'XX'}`);
+  const checks = checksOf(cur), bad = failing(cur);
+  $('checks').innerHTML = CHECKS.map(k => {
+    const v = checks ? checks[k] : null;
+    return `<li class="${v === true ? 'ok' : v === false ? 'bad' : ''}">${t('c' + k)}</li>`;
+  }).join('');
+  $('checkHint').textContent = cur && !landmarker ? t('checksPending') : bad.map(k => t('h' + k)).join(' ');
+  const okAll = okH && okC && !bad.length;
+  $('mrz').textContent = pad('V<SCHGEN<<FOTOGRAF<<BIYOMETRIK') + '\n' + pad(`3545MM<<H${mm(head)}<C${mm(crown)}<<${ymd}<${okAll ? 'OK' : 'XX'}`);
 
-  const state = !f ? null : okH && okC ? 'ok' : 'bad';
-  if (state === lastStamp) return;
+  const state = !f ? null : okAll ? 'ok' : 'bad';
+  const stampKey = state && state + (okH && okC ? 'c' : 'g');
+  if (stampKey === lastStamp) return;
   const animate = lastStamp !== undefined || state;
-  lastStamp = state;
+  lastStamp = stampKey;
   const stamp = $('stamp');
   stamp.className = 'stamp';
   if (!state) return;
   $('stampTxt').textContent = t(state === 'ok' ? 'stOk' : 'stBad');
-  $('stampSub').textContent = state === 'ok' ? t('stOkSub') + ' · ' + ymd : t('stBadSub');
+  $('stampSub').textContent = state === 'ok' ? t('stOkSub') + ' · ' + ymd : t(okH && okC ? 'stCheckSub' : 'stBadSub');
   void stamp.offsetWidth;
   stamp.classList.add(state);
   if (animate) { const pp = $('passport'); pp.classList.remove('thump'); void pp.offsetWidth; pp.classList.add('thump'); }
@@ -868,7 +1004,8 @@ function renderStrip() {
     b.className = 'thumb' + (p === cur ? ' on' : '');
     b.tabIndex = 0;
     b.append(thumbCanvas(p, 140));
-    b.insertAdjacentHTML('beforeend', `<span class="n">${String(i + 1).padStart(2, '0')}</span><button class="x" aria-label="${t('removePhoto')}" title="${t('removePhoto')}">×</button>`);
+    b.insertAdjacentHTML('beforeend', `<span class="n">${String(i + 1).padStart(2, '0')}</span><button class="x" aria-label="${t('removePhoto')}" title="${t('removePhoto')}">×</button>` +
+      (failing(p).length ? `<span class="warn" title="${failing(p).map(k => t('h' + k)).join(' ')}">!</span>` : ''));
     b.onclick = e => { if (e.target.classList.contains('x')) removePhoto(p); else if (p !== cur) select(p); };
     b.onkeydown = e => { if (e.key === 'Enter') select(p); };
     strip.append(b);
