@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>35×45 Sınır Kapısı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0b; --ink2: #141416; --line: #2b2b2f;
+    --bone: #ece6d8; --paper: #f1ebdc; --mute: #8b877d;
+    --red: #ff3b1f; --acid: #d4ff3a; --blue: #2f6bff;
+    --display: 'Anton', Impact, sans-serif;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--ink); color: var(--bone); font: 14px/1.5 var(--mono); overflow-x: hidden; }
+  body::after { /* film grain */
+    content: ''; position: fixed; inset: -50%; pointer-events: none; z-index: 100; opacity: .09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1s steps(6) infinite;
+  }
+  @keyframes grain { 0%{transform:translate(0,0)} 20%{transform:translate(-3%,2%)} 40%{transform:translate(2%,-4%)} 60%{transform:translate(-4%,-1%)} 80%{transform:translate(3%,3%)} 100%{transform:translate(0,0)} }
+  ::selection { background: var(--acid); color: var(--ink); }
+
+  /* ---------- ticker ---------- */
+  .ticker { border-bottom: 1px solid var(--line); overflow: hidden; white-space: nowrap; padding: 9px 0; font-size: 11px; letter-spacing: .22em; color: var(--acid); }
+  .ticker div { display: inline-block; animation: tick 45s linear infinite; }
+  .ticker b { color: var(--red); font-weight: 400; margin: 0 1.2em; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; min-height: calc(100vh - 38px); display: grid; grid-template-columns: 1fr auto; align-items: end; padding: 24px clamp(16px, 4vw, 56px) 40px; gap: 24px; }
+  .hero-top { position: absolute; top: 24px; left: clamp(16px, 4vw, 56px); right: clamp(16px, 4vw, 56px); display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .2em; color: var(--mute); text-transform: uppercase; }
+  .hero-top .live::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--red); border-radius: 50%; margin-right: 8px; animation: blink 1.2s infinite; }
+  @keyframes blink { 50% { opacity: .15; } }
+  .mega { font-family: var(--display); font-size: clamp(130px, 27vw, 440px); line-height: .78; letter-spacing: -.02em; margin: 0; text-transform: uppercase; }
+  .mega .x { color: var(--red); display: inline-block; animation: spin-x 6s cubic-bezier(.7,0,.3,1) infinite; }
+  @keyframes spin-x { 0%,80% { transform: rotate(0); } 100% { transform: rotate(180deg); } }
+  .mega .o { color: transparent; -webkit-text-stroke: 2px var(--bone); }
+  .mega-sub { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
+  .mega-sub .serif { font-family: var(--serif); font-style: italic; font-size: clamp(28px, 4vw, 58px); line-height: 1; }
+  .mega-sub .tag { font-size: 11px; letter-spacing: .2em; color: var(--mute); text-transform: uppercase; max-width: 340px; }
+
+  /* rotating drop disc */
+  .disc { position: relative; width: clamp(190px, 22vw, 290px); aspect-ratio: 1; cursor: pointer; margin-bottom: 8px; border: 0; padding: 0; background: none; color: inherit; }
+  .disc svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: rot 18s linear infinite; }
+  .disc text { font: 700 10.5px var(--mono); letter-spacing: .32em; fill: var(--bone); text-transform: uppercase; }
+  .disc .core { position: absolute; inset: 22%; border-radius: 50%; background: var(--red); display: grid; place-items: center; color: var(--ink); font: 400 clamp(40px, 5vw, 64px)/1 var(--display); transition: transform .35s cubic-bezier(.2,1.6,.4,1), background .2s; box-shadow: 0 0 0 0 rgba(255,59,31,.6); animation: pulse 2.4s infinite; }
+  .disc:hover .core { transform: scale(1.12) rotate(-8deg); background: var(--acid); }
+  .disc:hover svg { animation-duration: 4s; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,59,31,.55); } 70% { box-shadow: 0 0 0 34px rgba(255,59,31,0); } 100% { box-shadow: 0 0 0 0 rgba(255,59,31,0); } }
+
+  /* ---------- sections ---------- */
+  section.block { padding: 70px clamp(16px, 4vw, 56px); border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 20px; margin-bottom: 36px; flex-wrap: wrap; }
+  .sec-head .num { font: 400 15px var(--mono); color: var(--red); }
+  .sec-head h2 { font: 400 clamp(54px, 8vw, 120px)/.85 var(--display); margin: 0; text-transform: uppercase; letter-spacing: -.01em; }
+  .sec-head p { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--mute); margin: 0; }
+
+  /* ---------- passport ---------- */
+  .desk { display: grid; grid-template-columns: minmax(0, 640px) minmax(260px, 1fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+  .passport {
+    position: relative; color: #1b1a17; border-radius: 14px; padding: 22px 24px 18px; transform: rotate(-1.4deg);
+    background:
+      repeating-radial-gradient(circle at 78% 30%, transparent 0 9px, rgba(47,107,255,.07) 9px 10px),
+      repeating-radial-gradient(circle at 10% 90%, transparent 0 13px, rgba(255,59,31,.06) 13px 14px),
+      linear-gradient(135deg, #f4eedf, #e7dfcb);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.04), inset 0 0 60px rgba(120,100,60,.18);
+    transition: transform .5s cubic-bezier(.2,1,.3,1);
+  }
+  .passport:hover { transform: rotate(0deg); }
+  .passport.thump { animation: thump .35s ease-out; }
+  @keyframes thump { 30% { transform: rotate(-1.4deg) translateY(5px) scale(.99); } }
+  .pp-head { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .25em; text-transform: uppercase; border-bottom: 1px solid rgba(0,0,0,.2); padding-bottom: 10px; margin-bottom: 18px; }
+  .pp-head b { font-family: var(--display); font-weight: 400; font-size: 15px; letter-spacing: .08em; }
+  .pp-body { display: grid; grid-template-columns: minmax(150px, 245px) 1fr; gap: 22px; }
+  .slot { position: relative; }
+  #preview { width: 100%; aspect-ratio: 35 / 45; display: block; background: #fff; touch-action: none; cursor: crosshair; box-shadow: 0 1px 0 rgba(0,0,0,.25), 0 6px 14px rgba(0,0,0,.18); }
+  .slot-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; cursor: pointer;
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 6px, transparent 6px 12px), #fbf8f0; border: 2px dashed rgba(0,0,0,.3);
+    font: 400 38px/.9 var(--display); color: rgba(0,0,0,.35); }
+  .slot-empty small { display: block; font: 10px var(--mono); letter-spacing: .2em; margin-top: 10px; }
+  body.loaded .slot-empty { display: none; }
+  .slot .laser { position: absolute; left: -6%; right: -6%; height: 3px; top: 0; background: var(--acid); box-shadow: 0 0 18px 4px var(--acid), 0 0 60px 10px rgba(212,255,58,.4); opacity: 0; pointer-events: none; }
+  .slot.scanning .laser { animation: laser 1.3s ease-in-out 2; }
+  @keyframes laser { 0% { top: 0; opacity: 1; } 50% { top: 100%; opacity: 1; } 100% { top: 0; opacity: 1; } }
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; margin-top: 8px; color: rgba(0,0,0,.6); }
+  .legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 5px; }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; align-content: start; }
+  .field { border-bottom: 1px dotted rgba(0,0,0,.3); padding-bottom: 6px; }
+  .field.wide { grid-column: span 2; }
+  .field span { display: block; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(0,0,0,.5); }
+  .field b { font: 400 26px/1.1 var(--display); letter-spacing: .02em; }
+  .field b.ok { color: #0d7a3e; } .field b.bad { color: #c62a12; }
+  .field em { font: italic 17px var(--serif); }
+  .mrz { margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,.2); font: 700 clamp(9px, 1.45vw, 13px)/1.6 var(--mono); letter-spacing: .14em; white-space: pre; overflow: hidden; color: #2a2823; }
+
+  .stamp { position: absolute; right: 6%; bottom: 22%; padding: 10px 18px; border: 4px double currentColor; border-radius: 10px; text-align: center; transform: rotate(-14deg) scale(1); pointer-events: none; mix-blend-mode: multiply; opacity: 0; font-family: var(--display); text-transform: uppercase; }
+  .stamp b { display: block; font-weight: 400; font-size: clamp(30px, 4vw, 48px); line-height: 1; letter-spacing: .04em; }
+  .stamp small { display: block; font: 700 9px var(--mono); letter-spacing: .25em; margin-top: 4px; }
+  .stamp.ok { color: rgba(205,34,10,.85); opacity: 1; animation: stamp .45s cubic-bezier(.3,1.4,.5,1) both; }
+  .stamp.bad { color: rgba(30,60,200,.75); opacity: 1; animation: stamp .45s cubic-bezier(.3,1.4,.5,1) both; }
+  @keyframes stamp { 0% { opacity: 0; transform: rotate(-24deg) scale(2.6); filter: blur(4px); } 70% { opacity: 1; transform: rotate(-12deg) scale(.94); filter: blur(0); } 100% { opacity: 1; transform: rotate(-14deg) scale(1); } }
+
+  /* ---------- controls ---------- */
+  .panel { display: flex; flex-direction: column; gap: 22px; }
+  .ctrl label { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); margin-bottom: 10px; }
+  .ctrl label output { color: var(--acid); }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; cursor: ew-resize; }
+  input[type=range]::-webkit-slider-runnable-track { height: 2px; background: repeating-linear-gradient(90deg, var(--bone) 0 2px, transparent 2px 8px); }
+  input[type=range]::-moz-range-track { height: 2px; background: var(--bone); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -10px; background: var(--acid); border: 0; transform: rotate(45deg); }
+  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; background: var(--acid); border: 0; border-radius: 0; transform: rotate(45deg); }
+  .toggle { display: flex; align-items: center; gap: 14px; cursor: pointer; font-size: 12px; letter-spacing: .15em; text-transform: uppercase; user-select: none; }
+  .toggle input { appearance: none; -webkit-appearance: none; width: 54px; height: 28px; border: 1px solid var(--bone); border-radius: 0; position: relative; cursor: pointer; margin: 0; flex: none; }
+  .toggle input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: var(--bone); transition: left .25s cubic-bezier(.3,1.5,.5,1), background .2s; }
+  .toggle input:checked { border-color: var(--acid); }
+  .toggle input:checked::after { left: 29px; background: var(--acid); }
+  select { font: 700 13px var(--mono); letter-spacing: .08em; color: var(--bone); background: var(--ink2); border: 1px solid var(--line); padding: 12px 14px; width: 100%; border-radius: 0; text-transform: uppercase; }
+  .chips { display: flex; gap: 0; }
+  .chips select { flex: 1; }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { font: 700 12px var(--mono); letter-spacing: .18em; text-transform: uppercase; padding: 16px 20px; border: 1px solid var(--bone); background: transparent; color: var(--bone); cursor: pointer; border-radius: 0; position: relative; overflow: hidden; transition: color .2s; z-index: 0; }
+  .btn::before { content: ''; position: absolute; inset: 0; background: var(--bone); transform: translateY(101%); transition: transform .28s cubic-bezier(.7,0,.3,1); z-index: -1; }
+  .btn:hover:not(:disabled) { color: var(--ink); }
+  .btn:hover:not(:disabled)::before { transform: none; }
+  .btn.hot { background: var(--red); border-color: var(--red); color: var(--ink); font-size: 14px; padding: 22px 26px; }
+  .btn.hot::before { background: var(--acid); }
+  .btn:disabled { opacity: .3; cursor: not-allowed; }
+  .note { font-size: 11.5px; color: var(--mute); line-height: 1.6; }
+  .note b { color: var(--bone); font-weight: 700; }
+
+  /* ---------- light table ---------- */
+  .print { display: grid; grid-template-columns: minmax(250px, 340px) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+  .table { perspective: 1400px; padding: 30px 0; }
+  .table-glow { position: relative; padding: clamp(16px, 3vw, 40px); background: radial-gradient(ellipse at center, #2a2a20 0%, var(--ink) 70%); }
+  #sheet { width: 100%; display: block; background: #fff; transform: rotateX(24deg) rotateZ(-4deg) translateY(-10px); transform-origin: 50% 60%; box-shadow: 0 50px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.1); transition: transform .7s cubic-bezier(.2,1,.3,1); }
+  .table:hover #sheet { transform: none; }
+  .table-cap { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .2em; color: var(--mute); text-transform: uppercase; margin-top: 18px; }
+
+  /* ---------- rules ---------- */
+  .rules { list-style: none; margin: 0; padding: 0; counter-reset: r; }
+  .rules li { counter-increment: r; display: grid; grid-template-columns: 90px 1fr auto; gap: 20px; align-items: baseline; padding: 22px 0; border-bottom: 1px solid var(--line); font: 400 clamp(26px, 3.6vw, 52px)/1 var(--display); text-transform: uppercase; transition: color .2s, padding .3s; }
+  .rules li::before { content: counter(r, decimal-leading-zero); font: 400 14px var(--mono); color: var(--red); }
+  .rules li span { font: italic 18px/1.3 var(--serif); text-transform: none; color: var(--mute); max-width: 320px; text-align: right; }
+  .rules li:hover { color: var(--acid); padding-left: 16px; }
+
+  footer { padding: 40px clamp(16px, 4vw, 56px) 90px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); border-top: 1px solid var(--line); }
+
+  /* ---------- terminal status ---------- */
+  .term { position: fixed; left: 16px; bottom: 16px; z-index: 50; background: var(--ink); border: 1px solid var(--line); padding: 10px 14px; font-size: 12px; max-width: calc(100vw - 32px); box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+  .term::before { content: '>'; color: var(--acid); margin-right: 10px; }
+  .term::after { content: '▌'; color: var(--acid); margin-left: 4px; animation: blink 1s steps(1) infinite; }
+
+  /* ---------- full-page drop overlay ---------- */
+  .dropzone { position: fixed; inset: 0; z-index: 200; background: var(--red); color: var(--ink); display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .dropzone b { font: 400 clamp(120px, 30vw, 500px)/.8 var(--display); letter-spacing: -.02em; animation: shake .25s infinite; }
+  body.dragging .dropzone { opacity: 1; }
+  @keyframes shake { 25% { transform: translate(-6px, 3px) rotate(-1deg); } 75% { transform: translate(6px, -3px) rotate(1deg); } }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 80px; }
+    .disc { justify-self: end; margin-top: -20px; }
+    .desk, .print { grid-template-columns: 1fr; }
+    .passport { transform: none; padding: 16px; }
+    .pp-body { grid-template-columns: 1fr; }
+    .slot { max-width: 260px; }
+    .rules li { grid-template-columns: 44px 1fr; }
+    .rules li span { grid-column: 2; text-align: left; }
+    .stamp { right: 4%; bottom: 30%; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* ---------- language switch ---------- */
+  .hero-top .right { display: flex; align-items: center; gap: 18px; }
+  .langs { display: flex; border: 1px solid var(--line); }
+  .langs button { font: 700 11px var(--mono); letter-spacing: .15em; padding: 6px 10px; background: none; border: 0; color: var(--mute); cursor: pointer; }
+  .langs button.on { background: var(--acid); color: var(--ink); }
+  .langs button:hover:not(.on) { color: var(--bone); }
+
+  /* ---------- film strip ---------- */
+  .strip { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 34px; }
+  .thumb { position: relative; width: 70px; aspect-ratio: 35 / 45; padding: 0; border: 0; background: #fff; cursor: pointer; outline: 1px solid var(--line); outline-offset: 4px; transition: transform .2s, outline-color .2s; }
+  .thumb canvas { width: 100%; height: 100%; display: block; }
+  .thumb:hover { transform: translateY(-3px) rotate(-2deg); }
+  .thumb.on { outline: 2px solid var(--acid); }
+  .thumb .n { position: absolute; left: -8px; top: -8px; background: var(--red); color: var(--ink); font: 700 10px var(--mono); padding: 2px 5px; }
+  .thumb .x { position: absolute; right: -9px; top: -9px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: var(--bone); color: var(--ink); font: 700 12px/20px var(--mono); padding: 0; cursor: pointer; opacity: 0; transition: opacity .15s; }
+  .thumb:hover .x, .thumb:focus-within .x { opacity: 1; }
+  .thumb.add { background: transparent; outline: 1px dashed var(--mute); color: var(--bone); font: 700 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+  .thumb.add:hover { outline-color: var(--acid); color: var(--acid); }
+
+  /* ---------- print copies ---------- */
+  .cap { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .cap b { font: 400 64px/.9 var(--display); color: var(--acid); }
+  .cap span { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); }
+  .copies { display: flex; flex-direction: column; gap: 8px; }
+  .copy { display: flex; align-items: center; gap: 12px; }
+  .copy canvas { width: 32px; height: 41px; background: #fff; flex: none; }
+  .copy .lbl { flex: 1; font-size: 12px; letter-spacing: .15em; }
+  .stepper { display: flex; border: 1px solid var(--line); }
+  .stepper button { width: 34px; height: 34px; background: none; border: 0; color: var(--bone); font: 700 16px var(--mono); cursor: pointer; }
+  .stepper button:hover { background: var(--bone); color: var(--ink); }
+  .stepper input { width: 46px; text-align: center; background: var(--ink2); border: 0; border-left: 1px solid var(--line); border-right: 1px solid var(--line); color: var(--bone); font: 700 14px var(--mono); -moz-appearance: textfield; }
+  .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .total { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--mute); flex-wrap: wrap; }
+  .linkbtn { background: none; border: 0; padding: 0; color: var(--acid); font: 700 11px var(--mono); letter-spacing: .15em; text-transform: uppercase; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+
+  /* multiple sheets on the light table */
+  #sheets { display: flex; flex-direction: column; gap: 34px; align-items: center; }
+  #sheets canvas { width: 100%; display: block; background: #fff; transform: rotateX(24deg) rotateZ(-4deg) translateY(-10px); transform-origin: 50% 60%; box-shadow: 0 50px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.1); transition: transform .7s cubic-bezier(.2,1,.3,1); }
+  #sheets canvas.portrait { width: min(100%, 420px); }
+  #sheets canvas:nth-child(even) { transform: rotateX(24deg) rotateZ(3deg) translateY(-10px); }
+  .table:hover #sheets canvas { transform: none; }
+</style>
+</head>
+<body>
+<div class="dropzone"><b data-i18n="drop">BIRAK!</b></div>
+
+<div class="ticker" aria-hidden="true"><div id="ticker"></div></div>
+
+<header class="hero">
+  <div class="hero-top">
+    <span class="live" data-i18n="live"></span>
+    <span class="right"><span data-i18n="heroRight"></span><span class="langs" id="langs"></span></span>
+  </div>
+  <div>
+    <h1 class="mega">35<span class="x">×</span><span class="o">45</span></h1>
+    <div class="mega-sub">
+      <span class="serif" data-i18n="tagline"></span>
+      <span class="tag" data-i18n="tag"></span>
+    </div>
+  </div>
+  <button class="disc" id="drop">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <defs><path id="circ" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"/></defs>
+      <text><textPath href="#circ" textLength="512" lengthAdjust="spacing" id="ring"></textPath></text>
+    </svg>
+    <span class="core">↓</span>
+  </button>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+</header>
+
+<section class="block" id="editor">
+  <div class="sec-head"><span class="num">[02]</span><h2 data-i18n="secCheck"></h2><p data-i18n="secCheckSub"></p></div>
+  <div class="strip" id="strip"></div>
+  <div class="desk">
+    <div class="passport" id="passport">
+      <div class="pp-head"><span data-i18n="ppHead"></span><b>SCHENGEN · 35×45</b></div>
+      <div class="pp-body">
+        <div>
+          <div class="slot" id="slot">
+            <canvas id="preview"></canvas>
+            <div class="slot-empty" id="slotEmpty"><span data-i18n="empty1"></span><small data-i18n="empty2"></small></div>
+            <div class="laser"></div>
+          </div>
+          <div class="legend"><span><i style="background:#2f6bff"></i><span data-i18n="lgCrown"></span></span><span><i style="background:#12924b"></i><span data-i18n="lgChin"></span></span><span><i style="background:#f59e0b"></i><span data-i18n="lgAxis"></span></span></div>
+        </div>
+        <div class="fields">
+          <div class="field"><span data-i18n="fHead"></span><b id="mHead">—</b></div>
+          <div class="field"><span data-i18n="fCrown"></span><b id="mCrown">—</b></div>
+          <div class="field"><span data-i18n="fTarget"></span><b>32–36 MM</b></div>
+          <div class="field"><span data-i18n="fSize"></span><b>35 × 45</b></div>
+          <div class="field wide"><span data-i18n="fMethod"></span><em id="mSrc"></em></div>
+          <div class="field wide"><span data-i18n="fDate"></span><b id="mDate">—</b></div>
+        </div>
+      </div>
+      <div class="mrz" id="mrz"></div>
+      <div class="stamp" id="stamp"><b id="stampTxt"></b><small id="stampSub"></small></div>
+    </div>
+
+    <div class="panel">
+      <div class="ctrl"><label><span data-i18n="zoom"></span> <output id="zoomVal">100%</output></label><input type="range" id="zoom" min="60" max="180" step="0.5" value="100"></div>
+      <div class="ctrl"><label><span data-i18n="rotate"></span> <output><span id="rotVal">0</span>°</output></label><input type="range" id="rot" min="-15" max="15" step="0.25" value="0"></div>
+      <label class="toggle"><input type="checkbox" id="whiteBg"> <span data-i18n="removeBg"></span></label>
+      <div class="ctrl"><label data-i18n="bgColor"></label>
+        <select id="bgColor"><option value="#ffffff" data-i18n="white"></option><option value="#ececec" data-i18n="grey"></option></select>
+      </div>
+      <div class="btns">
+        <button class="btn" id="auto" data-i18n="auto"></button>
+        <button class="btn" id="dlSingle" data-i18n="single"></button>
+      </div>
+      <p class="note" data-i18n-html="note"></p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="sec-head"><span class="num">[03]</span><h2 data-i18n="secPrint"></h2><p data-i18n="secPrintSub"></p></div>
+  <div class="print">
+    <div class="panel">
+      <div class="ctrl"><label data-i18n="paper"></label>
+        <select id="paper"></select>
+      </div>
+      <div class="cap"><b id="capN">8</b><span id="capTxt"></span></div>
+      <div class="ctrl"><label data-i18n="copies"></label>
+        <div class="copies" id="copies"></div>
+      </div>
+      <div class="total"><span id="totalTxt"></span><button class="linkbtn" id="fillEven" data-i18n="fillEven"></button></div>
+      <label class="toggle"><input type="checkbox" id="cutLines" checked> <span data-i18n="cut"></span></label>
+      <button class="btn hot" id="dlSheet" disabled></button>
+      <button class="btn" id="printSheet" disabled data-i18n="print"></button>
+      <p class="note" data-i18n-html="printNote"></p>
+    </div>
+    <div class="table">
+      <div class="table-glow"><div id="sheets"></div></div>
+      <div class="table-cap"><span id="sheetCap"></span><span data-i18n="hover"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="sec-head"><span class="num">[04]</span><h2 data-i18n="secRules"></h2><p data-i18n="secRulesSub"></p></div>
+  <ol class="rules" id="rules"></ol>
+</section>
+
+<footer><span data-i18n="foot1"></span><span data-i18n="foot2"></span></footer>
+
+<div class="term" id="status"></div>
+
+<script type="module">
+const SPEC = { w: 35, h: 45, crown: 4, headMin: 32, headMax: 36, headTarget: 34 };
+// Fallback when segmentation is unavailable: chin-to-forehead landmark distance
+// as a share of the full chin-to-crown height.
+const FACE_TO_HEAD = 0.72;
+const MAX_SRC = 2600;
+const DPI = 300, PX_MM = DPI / 25.4, GAP = 2;
+
+// Lab photo papers print almost edge to edge; office papers need a wider margin.
+const PAPERS = {
+  '10x15': { w: 150, h: 100, m: 2, label: '10 × 15 cm' },
+  '4x6':   { w: 152.4, h: 101.6, m: 2, label: '4 × 6″ (10.2 × 15.2 cm)' },
+  '13x18': { w: 180, h: 130, m: 2, label: '13 × 18 cm' },
+  '15x20': { w: 200, h: 150, m: 2, label: '15 × 20 cm' },
+  'A5':    { w: 210, h: 148, m: 5, label: 'A5 (14.8 × 21 cm)' },
+  'A4':    { w: 297, h: 210, m: 6, label: 'A4 (21 × 29.7 cm)' },
+  'letter':{ w: 279.4, h: 215.9, m: 6, label: 'Letter (8.5 × 11″)' },
+};
+
+// ---------- i18n ----------
+const I18N = {
+  tr: {
+    title: 'Vize Fotoğrafı 35×45', drop: 'BIRAK!',
+    live: 'Kontrol noktası açık', heroRight: 'Biyometrik fotoğraf · Schengen',
+    tagline: 'sınırda takılma.',
+    tag: 'Fotoğrafları at, yüzü bulsun, milimetresine kadar kırpsın, baskı kağıdına dizsin. Hiçbir şey cihazından çıkmaz.',
+    ring: 'Fotoğraflarını buraya at ✦ sürükle ya da tıkla ✦ ',
+    ticker: ['ÇENE → TEPE 32–36 MM', '35 × 45 MM', 'AÇIK RENK ARKA PLAN', 'NÖTR İFADE · AĞIZ KAPALI', 'GÖZLER AÇIK · KAMERAYA BAK', 'SON 6 AY', 'GÖLGE YOK · YANSIMA YOK', '300 DPI BASKI'],
+    secCheck: 'Kontrol', secCheckSub: 'sürükle · kaydır · ince ayar',
+    ppHead: 'Vize fotoğrafı', fHead: 'Baş yüksekliği', fCrown: 'Tepe boşluğu', fTarget: 'Hedef', fSize: 'Ölçü', fMethod: 'Ölçüm yöntemi', fDate: 'Tarih',
+    mWait: 'fotoğraf bekleniyor', mNoFace: 'yüz bulunamadı — mavi/yeşil çizgilere göre elle hizala',
+    mMask: 'saç tepesi maskeden, çene yüz noktalarından ölçüldü', mEst: 'tepe tahmini — mavi çizgiyle gözle kontrol et',
+    empty1: 'FOTO YOK', empty2: 'tıkla ya da sürükle', lgCrown: 'tepe', lgChin: 'çene', lgAxis: 'eksen',
+    stOk: 'ONAYLANDI', stOkSub: 'ÖLÇÜLER UYGUN', stBad: 'AYAR GEREK', stBadSub: 'ÇİZGİLERE HİZALA',
+    zoom: 'Yakınlaştır', rotate: 'Döndür', removeBg: 'Arka planı sil', bgColor: 'Arka plan rengi', white: 'Beyaz', grey: 'Açık gri',
+    auto: '↻ Otomatik hizala', single: '↓ Tek foto', add: '+ Ekle', removePhoto: 'Fotoğrafı kaldır',
+    note: 'Fotoğrafı <b>sürükle</b> → kaydır. <b>Tekerlek</b> → yakınlaştır. Saçın tepesi <b>mavi</b> çizgide, çene <b>yeşil</b> bantta olsun. Mühür kırmızıysa tamamdır.',
+    secPrint: 'Baskı', secPrintSub: 'ışıklı masada bir kontrol et',
+    paper: 'Kağıt', capacity: 'fotoğraf sığar · sayfa başına', copies: 'Kaçar adet', fillEven: 'Sayfayı eşit doldur',
+    total: 'Toplam {n} foto · {p} sayfa', cut: 'Kesim çizgileri',
+    dl: '↓ Baskı dosyasını indir', dlN: '↓ {p} baskı dosyasını indir', print: '⎙ Yazdır', noPhotos: 'önce fotoğraf ekle',
+    printNote: 'JPG 300 DPI, gerçek ölçü bilgisi gömülü — fotoğrafçıya seçtiğin kağıt boyutunda baskı olarak ver. Evde yazdırırken ölçek <b>%100 / gerçek boyut</b>, "sayfaya sığdır" kapalı.',
+    hover: 'üstüne gel → düzleştir', pages: '{p} sayfa',
+    secRules: 'Kurallar', secRulesSub: 'konsoloslukta geri dönmesin diye',
+    rules: [['35 × 45 mm, renkli', 'son 6 ay içinde çekilmiş'], ['Çene → tepe 32–36 mm', "fotoğrafın %70–80'i yüz"], ['Açık, düz arka plan', 'beyaz ya da açık gri, gölgesiz'], ['Düz bak, ağız kapalı', 'nötr ifade, gözler açık ve net'], ['Gözlük yok, yansıma yok', 'varsa çerçeve gözü kapatmasın'], ['Yüz tamamen açık', 'başörtüsü yalnızca dini sebeple'], ['Filtre yok, rötuş yok', 'keskin, doğal ten rengi']],
+    foot1: 'Sunucu yok · yükleme yok · her şey tarayıcında', foot2: '35×45 · sınır kapısı',
+    sLoading: 'Yüz algılama modeli yükleniyor…', sReady: 'Hazır. Fotoğraf ekle.', sModelReady: 'Model hazır.',
+    sModelFail: 'Yüz algılama yüklenemedi (internet?). Elle hizalayabilirsin.', sDetecting: 'Yüz algılanıyor…',
+    sFound: 'Yüz bulundu ve otomatik hizalandı. Gerekirse ince ayar yap.', sNoFace: 'Yüz bulunamadı. Elle hizala.',
+    sNoModel: 'Model henüz hazır değil; elle hizalayabilirsin.', sBgNoModel: 'Arka plan modeli hazır değil.',
+    sBgWorking: 'Arka plan ayrıştırılıyor…', sBgDone: 'Arka plan değiştirildi. Saç kenarlarını kontrol et.',
+    sAdded: '{n} fotoğraf eklendi.',
+  },
+  en: {
+    title: 'Visa Photo 35×45', drop: 'DROP!',
+    live: 'Checkpoint open', heroRight: 'Biometric photo · Schengen',
+    tagline: "don't get stuck at the border.",
+    tag: 'Drop your photos. It finds the face, crops to the millimetre and lays them out for print. Nothing leaves your device.',
+    ring: 'Drop your photos here ✦ drag or click ✦ ',
+    ticker: ['CHIN → CROWN 32–36 MM', '35 × 45 MM', 'LIGHT PLAIN BACKGROUND', 'NEUTRAL FACE · MOUTH CLOSED', 'EYES OPEN · LOOK AT THE CAMERA', 'LAST 6 MONTHS', 'NO SHADOWS · NO GLARE', '300 DPI PRINT'],
+    secCheck: 'Check', secCheckSub: 'drag · nudge · fine-tune',
+    ppHead: 'Visa photo', fHead: 'Head height', fCrown: 'Top margin', fTarget: 'Target', fSize: 'Size', fMethod: 'Measured by', fDate: 'Date',
+    mWait: 'waiting for a photo', mNoFace: 'no face found — align manually to the blue/green lines',
+    mMask: 'crown from the hair mask, chin from face landmarks', mEst: 'crown estimated — check against the blue line',
+    empty1: 'NO PHOTO', empty2: 'click or drop', lgCrown: 'crown', lgChin: 'chin', lgAxis: 'axis',
+    stOk: 'APPROVED', stOkSub: 'MEASUREMENTS OK', stBad: 'ADJUST', stBadSub: 'ALIGN TO THE LINES',
+    zoom: 'Zoom', rotate: 'Rotate', removeBg: 'Replace background', bgColor: 'Background colour', white: 'White', grey: 'Light grey',
+    auto: '↻ Auto-align', single: '↓ Single photo', add: '+ Add', removePhoto: 'Remove photo',
+    note: '<b>Drag</b> the photo to move it. <b>Scroll</b> to zoom. Top of the hair on the <b>blue</b> line, chin inside the <b>green</b> band. A red stamp means you\'re good.',
+    secPrint: 'Print', secPrintSub: 'check it on the light table',
+    paper: 'Paper', capacity: 'photos fit · per sheet', copies: 'Copies', fillEven: 'Fill sheet evenly',
+    total: 'Total {n} photos · {p} sheet(s)', cut: 'Cut lines',
+    dl: '↓ Download print file', dlN: '↓ Download {p} print files', print: '⎙ Print', noPhotos: 'add a photo first',
+    printNote: 'JPG at 300 DPI with real-size metadata — give it to a photo lab at the chosen paper size. When printing at home pick <b>100% / actual size</b>, not "fit to page".',
+    hover: 'hover → flatten', pages: '{p} sheet(s)',
+    secRules: 'Rules', secRulesSub: "so the consulate doesn't bounce it",
+    rules: [['35 × 45 mm, colour', 'taken within the last 6 months'], ['Chin → crown 32–36 mm', 'face fills 70–80% of the photo'], ['Light, plain background', 'white or light grey, no shadows'], ['Look straight, mouth closed', 'neutral expression, eyes open and sharp'], ['No glasses, no glare', 'if worn, frames must not cover the eyes'], ['Face fully visible', 'head covering for religious reasons only'], ['No filters, no retouching', 'sharp, natural skin tone']],
+    foot1: 'No server · no upload · everything runs in your browser', foot2: '35×45 · border control',
+    sLoading: 'Loading face detection model…', sReady: 'Ready. Add a photo.', sModelReady: 'Model ready.',
+    sModelFail: "Couldn't load face detection (offline?). You can still align manually.", sDetecting: 'Detecting face…',
+    sFound: 'Face found and auto-aligned. Fine-tune if needed.', sNoFace: 'No face found. Align manually.',
+    sNoModel: 'Model not ready yet; you can align manually.', sBgNoModel: 'Background model not ready.',
+    sBgWorking: 'Separating background…', sBgDone: 'Background replaced. Check the hair edges.',
+    sAdded: '{n} photo(s) added.',
+  },
+  de: {
+    title: 'Visumfoto 35×45', drop: 'LOS!',
+    live: 'Kontrollpunkt offen', heroRight: 'Biometrisches Foto · Schengen',
+    tagline: 'bleib nicht an der Grenze hängen.',
+    tag: 'Fotos reinwerfen: Das Gesicht wird erkannt, millimetergenau zugeschnitten und für den Druck angeordnet. Nichts verlässt dein Gerät.',
+    ring: 'Fotos hier ablegen ✦ ziehen oder klicken ✦ ',
+    ticker: ['KINN → SCHEITEL 32–36 MM', '35 × 45 MM', 'HELLER, EINFARBIGER HINTERGRUND', 'NEUTRALER AUSDRUCK · MUND ZU', 'AUGEN OFFEN · IN DIE KAMERA', 'NICHT ÄLTER ALS 6 MONATE', 'KEINE SCHATTEN · KEINE SPIEGELUNG', '300 DPI DRUCK'],
+    secCheck: 'Prüfung', secCheckSub: 'ziehen · schieben · feinjustieren',
+    ppHead: 'Visumfoto', fHead: 'Kopfhöhe', fCrown: 'Abstand oben', fTarget: 'Soll', fSize: 'Format', fMethod: 'Messung', fDate: 'Datum',
+    mWait: 'warte auf ein Foto', mNoFace: 'kein Gesicht erkannt — manuell an blauer/grüner Linie ausrichten',
+    mMask: 'Scheitel aus der Haarmaske, Kinn aus Gesichtspunkten', mEst: 'Scheitel geschätzt — an der blauen Linie prüfen',
+    empty1: 'KEIN FOTO', empty2: 'klicken oder ablegen', lgCrown: 'Scheitel', lgChin: 'Kinn', lgAxis: 'Achse',
+    stOk: 'GENEHMIGT', stOkSub: 'MASSE OK', stBad: 'ANPASSEN', stBadSub: 'AN DEN LINIEN AUSRICHTEN',
+    zoom: 'Zoom', rotate: 'Drehen', removeBg: 'Hintergrund ersetzen', bgColor: 'Hintergrundfarbe', white: 'Weiß', grey: 'Hellgrau',
+    auto: '↻ Automatisch ausrichten', single: '↓ Einzelfoto', add: '+ Neu', removePhoto: 'Foto entfernen',
+    note: 'Foto <b>ziehen</b> → verschieben. <b>Mausrad</b> → zoomen. Haare oben auf der <b>blauen</b> Linie, Kinn im <b>grünen</b> Band. Roter Stempel = passt.',
+    secPrint: 'Druck', secPrintSub: 'auf dem Leuchttisch prüfen',
+    paper: 'Papier', capacity: 'Fotos passen · pro Blatt', copies: 'Anzahl', fillEven: 'Blatt gleichmäßig füllen',
+    total: 'Gesamt {n} Fotos · {p} Blatt', cut: 'Schnittlinien',
+    dl: '↓ Druckdatei laden', dlN: '↓ {p} Druckdateien laden', print: '⎙ Drucken', noPhotos: 'zuerst ein Foto hinzufügen',
+    printNote: 'JPG mit 300 DPI und eingebetteter Größe — im Fotolabor im gewählten Format drucken lassen. Zu Hause <b>100 % / tatsächliche Größe</b> wählen, nicht „an Seite anpassen".',
+    hover: 'Hover → flach', pages: '{p} Blatt',
+    secRules: 'Regeln', secRulesSub: 'damit das Konsulat es nicht ablehnt',
+    rules: [['35 × 45 mm, farbig', 'nicht älter als 6 Monate'], ['Kinn → Scheitel 32–36 mm', 'Gesicht füllt 70–80 % des Fotos'], ['Heller, einfarbiger Hintergrund', 'weiß oder hellgrau, ohne Schatten'], ['Gerade schauen, Mund zu', 'neutraler Ausdruck, Augen offen und scharf'], ['Keine Brille, keine Spiegelung', 'Gestell darf die Augen nicht verdecken'], ['Gesicht ganz sichtbar', 'Kopfbedeckung nur aus religiösen Gründen'], ['Keine Filter, keine Retusche', 'scharf, natürlicher Hautton']],
+    foot1: 'Kein Server · kein Upload · alles läuft im Browser', foot2: '35×45 · Grenzkontrolle',
+    sLoading: 'Gesichtserkennung wird geladen…', sReady: 'Bereit. Foto hinzufügen.', sModelReady: 'Modell bereit.',
+    sModelFail: 'Gesichtserkennung nicht geladen (offline?). Manuelles Ausrichten geht trotzdem.', sDetecting: 'Gesicht wird erkannt…',
+    sFound: 'Gesicht erkannt und ausgerichtet. Bei Bedarf feinjustieren.', sNoFace: 'Kein Gesicht erkannt. Manuell ausrichten.',
+    sNoModel: 'Modell noch nicht bereit; manuell ausrichten möglich.', sBgNoModel: 'Hintergrundmodell nicht bereit.',
+    sBgWorking: 'Hintergrund wird getrennt…', sBgDone: 'Hintergrund ersetzt. Haarkanten prüfen.',
+    sAdded: '{n} Foto(s) hinzugefügt.',
+  },
+};
+const LANGS = Object.keys(I18N);
+let lang = (() => {
+  try { const s = localStorage.getItem('lang'); if (LANGS.includes(s)) return s; } catch {}
+  const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  return LANGS.includes(nav) ? nav : 'en';
+})();
+const t = (k, vars) => {
+  let s = I18N[lang][k] ?? I18N.en[k] ?? k;
+  if (vars && typeof s === 'string') s = s.replace(/\{(\w+)\}/g, (_, n) => vars[n]);
+  return s;
+};
+
+const $ = id => document.getElementById(id);
+const preview = $('preview'), pctx = preview.getContext('2d');
+
+let statusKey = ['sLoading'];
+function setStatus(key, vars) { statusKey = [key, vars]; $('status').textContent = t(key, vars); }
+
+function applyI18n() {
+  document.documentElement.lang = lang;
+  document.title = t('title');
+  document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-html]').forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
+  $('ring').textContent = t('ring');
+  const tick = t('ticker').join('<b>✦</b>') + '<b>✦</b>';
+  $('ticker').innerHTML = tick + tick;
+  $('rules').innerHTML = t('rules').map(([a, b]) => `<li>${a}<span>${b}</span></li>`).join('');
+  $('langs').innerHTML = LANGS.map(l => `<button data-l="${l}" class="${l === lang ? 'on' : ''}">${l.toUpperCase()}</button>`).join('');
+  $('status').textContent = t(...statusKey);
+  $('drop').setAttribute('aria-label', t('ring'));
+  lastStamp = undefined;
+  renderStrip();
+  updateMetric();
+  renderCopies();
+  scheduleSheet();
+}
+$('langs').addEventListener('click', e => {
+  const l = e.target.dataset?.l;
+  if (!l || l === lang) return;
+  lang = l;
+  try { localStorage.setItem('lang', l); } catch {}
+  applyI18n();
+});
+
+// ---------- state ----------
+let landmarker = null, segmenter = null;
+const photos = [];          // { id, src, bg, mask, face, st, base, zoom, rot, whiteBg, bgColor, copies }
+let cur = null;
+let uid = 0;
+
+// ---------- model loading ----------
+async function loadModels() {
+  try {
+    const { FilesetResolver, FaceLandmarker, ImageSegmenter } =
+      await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14');
+    const vision = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+    landmarker = await FaceLandmarker.createFromOptions(vision, {
+      baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task' },
+      runningMode: 'IMAGE', numFaces: 1,
+    });
+    segmenter = await ImageSegmenter.createFromOptions(vision, {
+      baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite' },
+      runningMode: 'IMAGE', outputConfidenceMasks: true, outputCategoryMask: false,
+    });
+    setStatus(photos.length ? 'sModelReady' : 'sReady');
+    // Photos added before the models finished get a proper auto-fit now.
+    photos.filter(p => !p.face?.crownFromMask).forEach(analyze);
+    if (cur) select(cur);
+  } catch (e) {
+    console.error(e);
+    setStatus('sModelFail');
+  }
+}
+
+// ---------- image input ----------
+const fileIn = $('file');
+$('drop').onclick = () => fileIn.click();
+$('slotEmpty').onclick = () => fileIn.click();
+fileIn.onchange = () => { addFiles(fileIn.files); fileIn.value = ''; };
+// The whole page is a drop target.
+let dragDepth = 0;
+const hasFile = e => [...(e.dataTransfer?.types || [])].includes('Files');
+window.addEventListener('dragenter', e => { if (!hasFile(e)) return; dragDepth++; document.body.classList.add('dragging'); });
+window.addEventListener('dragleave', () => { if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove('dragging'); } });
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => {
+  e.preventDefault(); dragDepth = 0; document.body.classList.remove('dragging');
+  addFiles(e.dataTransfer.files);
+});
+
+async function addFiles(files) {
+  const imgs = [];
+  for (const f of files) {
+    if (!f.type.startsWith('image/')) continue;
+    const url = URL.createObjectURL(f);
+    const img = new Image();
+    img.src = url;
+    try { await img.decode(); imgs.push(img); } catch (e) { console.error(e); }
+    URL.revokeObjectURL(url);
+  }
+  addImages(imgs);
+}
+
+function addImages(imgs) {
+  if (!imgs.length) return;
+  const first = !photos.length;
+  let last = null;
+  for (const img of imgs) {
+    const k = Math.min(1, MAX_SRC / Math.max(img.naturalWidth, img.naturalHeight));
+    const src = document.createElement('canvas');
+    src.width = Math.round(img.naturalWidth * k);
+    src.height = Math.round(img.naturalHeight * k);
+    src.getContext('2d').drawImage(img, 0, 0, src.width, src.height);
+    last = { id: ++uid, src, bg: null, mask: null, face: null, st: null, base: null, zoom: 100, rot: 0, whiteBg: false, bgColor: '#ffffff', copies: 0 };
+    photos.push(last);
+    analyze(last);
+  }
+  fillEven();
+  select(last);
+  if (imgs.length > 1) setStatus('sAdded', { n: imgs.length });
+  if (first) $('editor').scrollIntoView({ behavior: 'smooth' });
+}
+window.addImages = addImages;
+
+function removePhoto(p) {
+  const i = photos.indexOf(p);
+  if (i < 0) return;
+  photos.splice(i, 1);
+  fillEven();
+  select(photos[Math.min(i, photos.length - 1)] || null);
+}
+
+function select(p) {
+  cur = p;
+  document.body.classList.toggle('loaded', !!p);
+  lastStamp = undefined;
+  if (p) {
+    $('zoom').value = p.zoom; $('zoomVal').textContent = Math.round(p.zoom) + '%';
+    $('rot').value = p.rot; $('rotVal').textContent = p.rot;
+    $('whiteBg').checked = p.whiteBg; $('bgColor').value = p.bgColor;
+    const slot = $('slot');
+    slot.classList.remove('scanning'); void slot.offsetWidth; slot.classList.add('scanning');
+    setTimeout(() => slot.classList.remove('scanning'), 2700);
+  }
+  redraw();
+  renderStrip();
+}
+
+function analyze(p) {
+  if (landmarker) {
+    setStatus('sDetecting');
+    const lm = landmarker.detect(p.src).faceLandmarks?.[0];
+    if (lm) {
+      const P = i => ({ x: lm[i].x * p.src.width, y: lm[i].y * p.src.height });
+      p.face = { eyeL: P(33), eyeR: P(263), chin: P(152), top: P(10) };
+      setStatus('sFound');
+    } else {
+      p.face = null;
+      setStatus('sNoFace');
+    }
+  } else {
+    setStatus('sNoModel');
+  }
+  autoFit(p);
+  if (p.whiteBg) buildBackground(p);
+}
+
+// ---------- geometry ----------
+function autoFit(p) {
+  const f = p.face;
+  if (f) {
+    const ex = f.eyeR.x - f.eyeL.x, ey = f.eyeR.y - f.eyeL.y;
+    const ang = Math.atan2(ey, ex);
+    const down = { x: -Math.sin(ang), y: Math.cos(ang) };
+    const mid = { x: (f.eyeL.x + f.eyeR.x) / 2, y: (f.eyeL.y + f.eyeR.y) / 2 };
+    const proj = q => (q.x - mid.x) * down.x + (q.y - mid.y) * down.y;
+    const tChin = proj(f.chin), tTop = proj(f.top);
+    const tCrown = findCrown(p, mid, down, tTop, Math.hypot(ex, ey));
+    const ratio = tCrown == null ? 0 : (tChin - tTop) / (tChin - tCrown);
+    // Sanity check: the crown should sit a plausible distance above the forehead.
+    f.crownFromMask = ratio > 0.55 && ratio < 0.92;
+    const headPx = f.crownFromMask ? tChin - tCrown : (tChin - tTop) / FACE_TO_HEAD;
+    const s = headPx / SPEC.headTarget;
+    const tCenter = tChin - headPx + (SPEC.h / 2 - SPEC.crown) * s;
+    f.headPx = headPx;
+    p.base = { cx: mid.x + down.x * tCenter, cy: mid.y + down.y * tCenter, s, ang };
+  } else {
+    const s = Math.min(p.src.width / SPEC.w, p.src.height / SPEC.h);
+    p.base = { cx: p.src.width / 2, cy: p.src.height / 2, s, ang: 0 };
+  }
+  p.st = { ...p.base };
+  p.zoom = 100; p.rot = 0;
+  if (p === cur) {
+    $('zoom').value = 100; $('zoomVal').textContent = '100%'; $('rot').value = 0; $('rotVal').textContent = '0';
+    lastStamp = undefined;
+    redraw();
+  }
+}
+
+// Map a source point of the current photo to output mm.
+function toMm(q) {
+  const st = cur.st;
+  const dx = q.x - st.cx, dy = q.y - st.cy;
+  const c = Math.cos(-st.ang), sn = Math.sin(-st.ang);
+  return { x: SPEC.w / 2 + (dx * c - dy * sn) / st.s, y: SPEC.h / 2 + (dx * sn + dy * c) / st.s };
+}
+
+function renderPhoto(ctx, W, H, p) {
+  const st = p.st;
+  const k = (W / SPEC.w) / st.s;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = p.whiteBg ? p.bgColor : '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  ctx.translate(W / 2, H / 2);
+  ctx.scale(k, k);
+  ctx.rotate(-st.ang);
+  ctx.translate(-st.cx, -st.cy);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage((p.whiteBg && p.bg) || p.src, 0, 0);
+  ctx.restore();
+}
+
+// ---------- preview ----------
+function redraw() {
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = preview.clientWidth || 245;
+  const W = Math.round(cssW * dpr), H = Math.round(W * SPEC.h / SPEC.w);
+  if (preview.width !== W || preview.height !== H) { preview.width = W; preview.height = H; }
+  if (!cur) { pctx.clearRect(0, 0, W, H); updateMetric(); scheduleSheet(); return; }
+  renderPhoto(pctx, W, H, cur);
+
+  const m = W / SPEC.w;
+  const line = (x1, y1, x2, y2) => { pctx.beginPath(); pctx.moveTo(x1, y1); pctx.lineTo(x2, y2); pctx.stroke(); };
+  pctx.save();
+  pctx.lineWidth = Math.max(1, dpr);
+  pctx.fillStyle = 'rgba(18,146,75,.16)';
+  pctx.fillRect(0, (SPEC.crown + SPEC.headMin) * m, W, (SPEC.headMax - SPEC.headMin) * m);
+  pctx.strokeStyle = '#12924b';
+  line(0, (SPEC.crown + SPEC.headMin) * m, W, (SPEC.crown + SPEC.headMin) * m);
+  line(0, (SPEC.crown + SPEC.headMax) * m, W, (SPEC.crown + SPEC.headMax) * m);
+  pctx.strokeStyle = '#1f5eff'; pctx.setLineDash([6 * dpr, 4 * dpr]);
+  line(0, SPEC.crown * m, W, SPEC.crown * m);
+  pctx.strokeStyle = 'rgba(245,158,11,.9)'; pctx.setLineDash([3 * dpr, 4 * dpr]);
+  line(W / 2, 0, W / 2, H);
+  pctx.restore();
+
+  updateMetric();
+  scheduleSheet();
+}
+
+let lastStamp;
+function updateMetric() {
+  const f = cur?.face;
+  const head = f ? f.headPx / cur.st.s : null;
+  const crown = f ? toMm(f.chin).y - head : null;
+  const okH = head != null && head >= SPEC.headMin && head <= SPEC.headMax;
+  const okC = crown != null && crown >= 2 && crown <= 7;
+  const set = (id, v, ok) => { const el = $(id); el.textContent = v; el.className = v === '—' ? '' : ok ? 'ok' : 'bad'; };
+  set('mHead', head != null ? head.toFixed(1) + ' MM' : '—', okH);
+  set('mCrown', crown != null ? crown.toFixed(1) + ' MM' : '—', okC);
+  $('mSrc').textContent = t(!cur ? 'mWait' : !f ? 'mNoFace' : f.crownFromMask ? 'mMask' : 'mEst');
+  const d = new Date();
+  $('mDate').textContent = cur ? d.toLocaleDateString(lang, { day: '2-digit', month: 'short', year: 'numeric' }).toLocaleUpperCase(lang) : '—';
+
+  const pad = (s, n = 44) => (s + '<'.repeat(n)).slice(0, n);
+  const mm = v => v == null ? '<<<' : String(Math.round(v * 10)).padStart(3, '0');
+  const ymd = d.toISOString().slice(2, 10).replace(/-/g, '');
+  $('mrz').textContent = pad('V<SCHGEN<<FOTOGRAF<<BIYOMETRIK') + '\n' + pad(`3545MM<<H${mm(head)}<C${mm(crown)}<<${ymd}<${okH && okC ? 'OK' : 'XX'}`);
+
+  const state = !f ? null : okH && okC ? 'ok' : 'bad';
+  if (state === lastStamp) return;
+  const animate = lastStamp !== undefined || state;
+  lastStamp = state;
+  const stamp = $('stamp');
+  stamp.className = 'stamp';
+  if (!state) return;
+  $('stampTxt').textContent = t(state === 'ok' ? 'stOk' : 'stBad');
+  $('stampSub').textContent = state === 'ok' ? t('stOkSub') + ' · ' + ymd : t('stBadSub');
+  void stamp.offsetWidth;
+  stamp.classList.add(state);
+  if (animate) { const pp = $('passport'); pp.classList.remove('thump'); void pp.offsetWidth; pp.classList.add('thump'); }
+}
+
+// ---------- strip of photos ----------
+function thumbCanvas(p, w) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = Math.round(w * SPEC.h / SPEC.w);
+  if (p.st) renderPhoto(c.getContext('2d'), c.width, c.height, p);
+  return c;
+}
+function renderStrip() {
+  const strip = $('strip');
+  strip.innerHTML = '';
+  photos.forEach((p, i) => {
+    const b = document.createElement('div');
+    b.className = 'thumb' + (p === cur ? ' on' : '');
+    b.tabIndex = 0;
+    b.append(thumbCanvas(p, 140));
+    b.insertAdjacentHTML('beforeend', `<span class="n">${String(i + 1).padStart(2, '0')}</span><button class="x" aria-label="${t('removePhoto')}" title="${t('removePhoto')}">×</button>`);
+    b.onclick = e => { if (e.target.classList.contains('x')) removePhoto(p); else if (p !== cur) select(p); };
+    b.onkeydown = e => { if (e.key === 'Enter') select(p); };
+    strip.append(b);
+  });
+  const add = document.createElement('button');
+  add.className = 'thumb add';
+  add.textContent = t('add');
+  add.onclick = () => fileIn.click();
+  strip.append(add);
+}
+let stripTimer = null;
+function scheduleStrip() { clearTimeout(stripTimer); stripTimer = setTimeout(renderStrip, 250); }
+
+// ---------- editor controls ----------
+let drag = null;
+preview.addEventListener('pointerdown', e => { if (!cur) return; drag = { x: e.clientX, y: e.clientY }; preview.setPointerCapture(e.pointerId); });
+preview.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const st = cur.st;
+  const pxPerMm = preview.clientWidth / SPEC.w;
+  const dx = (e.clientX - drag.x) / pxPerMm * st.s, dy = (e.clientY - drag.y) / pxPerMm * st.s;
+  const c = Math.cos(st.ang), s = Math.sin(st.ang);
+  st.cx -= dx * c - dy * s;
+  st.cy -= dx * s + dy * c;
+  drag = { x: e.clientX, y: e.clientY };
+  redraw(); scheduleStrip();
+});
+preview.addEventListener('pointerup', () => drag = null);
+preview.addEventListener('pointercancel', () => drag = null);
+preview.addEventListener('wheel', e => {
+  if (!cur) return;
+  e.preventDefault();
+  const z = $('zoom');
+  z.value = Math.min(+z.max, Math.max(+z.min, +z.value * Math.exp(-e.deltaY * 0.001)));
+  applyZoom();
+}, { passive: false });
+
+function applyZoom() {
+  if (!cur) return;
+  cur.zoom = +$('zoom').value;
+  cur.st.s = cur.base.s * 100 / cur.zoom;
+  $('zoomVal').textContent = Math.round(cur.zoom) + '%';
+  redraw(); scheduleStrip();
+}
+$('zoom').oninput = applyZoom;
+$('rot').oninput = () => {
+  if (!cur) return;
+  cur.rot = +$('rot').value;
+  $('rotVal').textContent = cur.rot;
+  cur.st.ang = cur.base.ang + cur.rot * Math.PI / 180;
+  redraw(); scheduleStrip();
+};
+$('auto').onclick = () => { if (cur) { autoFit(cur); renderStrip(); } };
+window.addEventListener('resize', redraw);
+
+// ---------- background replacement ----------
+$('whiteBg').onchange = () => {
+  if (!cur) return;
+  cur.whiteBg = $('whiteBg').checked;
+  if (cur.whiteBg && !cur.bg) buildBackground(cur); else { redraw(); renderStrip(); }
+};
+$('bgColor').onchange = () => {
+  if (!cur) return;
+  cur.bgColor = $('bgColor').value;
+  if (cur.whiteBg) { cur.bg = null; buildBackground(cur); } else redraw();
+};
+
+function ensureMask(p) {
+  if (p.mask || !segmenter) return p.mask;
+  const res = segmenter.segment(p.src);
+  // selfie_multiclass: index 0 = background confidence
+  const m = res.confidenceMasks[0];
+  p.mask = { w: m.width, h: m.height, data: Float32Array.from(m.getAsFloat32Array()) };
+  res.close?.();
+  return p.mask;
+}
+function bgConf(p, x, y) {
+  const m = p.mask;
+  const mx = Math.round(x / p.src.width * m.w), my = Math.round(y / p.src.height * m.h);
+  if (mx < 0 || my < 0 || mx >= m.w || my >= m.h) return 1;
+  return m.data[my * m.w + mx];
+}
+
+// Walk up from the forehead along the face axis until the mask says background.
+// Returns the crown position as a projection on the down axis, or null.
+function findCrown(p, mid, down, tTop, eyeDist) {
+  if (!ensureMask(p)) return null;
+  const side = { x: down.y, y: -down.x };
+  const step = Math.max(1, eyeDist / 60), maxT = eyeDist * 3;
+  const hits = [];
+  for (const off of [-0.5, -0.25, 0, 0.25, 0.5]) {
+    let miss = 0, last = tTop;
+    for (let d = 0; d < maxT; d += step) {
+      const tt = tTop - d;
+      const x = mid.x + down.x * tt + side.x * off * eyeDist, y = mid.y + down.y * tt + side.y * off * eyeDist;
+      if (bgConf(p, x, y) < 0.5) { last = tt; miss = 0; } else if (++miss > 4) break;
+    }
+    hits.push(last);
+  }
+  hits.sort((a, b) => a - b);
+  return hits[1]; // second-highest: ignores a single stray hair spike
+}
+
+function buildBackground(p) {
+  if (!segmenter) {
+    setStatus('sBgNoModel'); p.whiteBg = false;
+    if (p === cur) $('whiteBg').checked = false;
+    return;
+  }
+  setStatus('sBgWorking');
+  setTimeout(() => {
+    const mask = ensureMask(p);
+    const { width: W, height: H } = p.src;
+    const mc = document.createElement('canvas'); mc.width = mask.w; mc.height = mask.h;
+    const mctx = mc.getContext('2d');
+    const mid = mctx.createImageData(mask.w, mask.h);
+    for (let i = 0; i < mask.data.length; i++) {
+      // smoothstep sharpens the edge while keeping a soft hairline
+      let v = mask.data[i]; v = Math.min(1, Math.max(0, (v - 0.25) / 0.5)); v = v * v * (3 - 2 * v);
+      mid.data[i * 4 + 3] = Math.round(v * 255);
+    }
+    mctx.putImageData(mid, 0, 0);
+    p.bg = document.createElement('canvas'); p.bg.width = W; p.bg.height = H;
+    const b = p.bg.getContext('2d');
+    b.drawImage(p.src, 0, 0);
+    // paint the background colour where the mask (background confidence) is high
+    const tint = document.createElement('canvas'); tint.width = W; tint.height = H;
+    const tc = tint.getContext('2d');
+    tc.imageSmoothingQuality = 'high';
+    tc.drawImage(mc, 0, 0, W, H);
+    tc.globalCompositeOperation = 'source-in';
+    tc.fillStyle = p.bgColor;
+    tc.fillRect(0, 0, W, H);
+    b.drawImage(tint, 0, 0);
+    setStatus('sBgDone');
+    if (p === cur) redraw();
+    renderStrip();
+  }, 20);
+}
+
+// ---------- print sheets ----------
+$('paper').innerHTML = Object.entries(PAPERS).map(([k, p]) => `<option value="${k}">${p.label}</option>`).join('');
+
+// Pick the orientation that fits the most photos.
+function layout(key) {
+  const p = PAPERS[key];
+  let best = null;
+  for (const [W, H] of [[p.w, p.h], [p.h, p.w]]) {
+    const cols = Math.floor((W - 2 * p.m + GAP) / (SPEC.w + GAP));
+    const rows = Math.floor((H - 2 * p.m + GAP) / (SPEC.h + GAP));
+    if (!best || cols * rows > best.cap) best = { W, H, cols, rows, cap: cols * rows };
+  }
+  return best;
+}
+
+function fillEven() {
+  if (!photos.length) return;
+  const cap = layout($('paper').value).cap;
+  const each = Math.max(1, Math.floor(cap / photos.length));
+  let extra = Math.max(0, cap - each * photos.length);
+  photos.forEach(p => { p.copies = each + (extra-- > 0 ? 1 : 0); });
+  renderCopies();
+  scheduleSheet();
+}
+$('fillEven').onclick = fillEven;
+$('paper').onchange = fillEven;
+$('cutLines').onchange = () => scheduleSheet();
+
+function renderCopies() {
+  const box = $('copies');
+  box.innerHTML = '';
+  if (!photos.length) { box.innerHTML = `<span class="note">${t('noPhotos')}</span>`; return; }
+  photos.forEach((p, i) => {
+    const row = document.createElement('div');
+    row.className = 'copy';
+    row.append(thumbCanvas(p, 64));
+    row.insertAdjacentHTML('beforeend', `<span class="lbl">#${String(i + 1).padStart(2, '0')}</span>
+      <span class="stepper"><button data-d="-1" aria-label="−">−</button><input type="number" min="0" max="99" value="${p.copies}"><button data-d="1" aria-label="+">+</button></span>`);
+    const input = row.querySelector('input');
+    const setN = n => { p.copies = Math.max(0, Math.min(99, n | 0)); input.value = p.copies; scheduleSheet(); };
+    row.querySelectorAll('button').forEach(b => b.onclick = () => setN(p.copies + +b.dataset.d));
+    input.onchange = () => setN(+input.value);
+    box.append(row);
+  });
+}
+
+let sheetTimer = null;
+function scheduleSheet() { clearTimeout(sheetTimer); sheetTimer = setTimeout(buildSheets, 150); }
+
+function photoCanvas(p, dpi) {
+  const c = document.createElement('canvas');
+  c.width = Math.round(SPEC.w / 25.4 * dpi);
+  c.height = Math.round(SPEC.h / 25.4 * dpi);
+  renderPhoto(c.getContext('2d'), c.width, c.height, p);
+  return c;
+}
+
+let pages = [];
+function buildSheets() {
+  const key = $('paper').value;
+  const L = layout(key);
+  const slots = photos.flatMap(p => Array(p.copies).fill(p));
+  const nPages = Math.max(1, Math.ceil(slots.length / L.cap));
+  const gw = L.cols * SPEC.w + (L.cols - 1) * GAP, gh = L.rows * SPEC.h + (L.rows - 1) * GAP;
+  const ox = (L.W - gw) / 2, oy = (L.H - gh) / 2;
+  const cache = new Map();
+  const box = $('sheets');
+  while (box.children.length > nPages) box.lastChild.remove();
+  while (box.children.length < nPages) box.append(document.createElement('canvas'));
+  pages = [...box.children];
+
+  pages.forEach((sheet, pi) => {
+    sheet.width = Math.round(L.W * PX_MM); sheet.height = Math.round(L.H * PX_MM);
+    sheet.classList.toggle('portrait', L.H > L.W);
+    const ctx = sheet.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, sheet.width, sheet.height);
+    ctx.imageSmoothingQuality = 'high';
+    slots.slice(pi * L.cap, (pi + 1) * L.cap).forEach((p, i) => {
+      if (!cache.has(p)) cache.set(p, photoCanvas(p, 600));
+      const c = i % L.cols, r = Math.floor(i / L.cols);
+      const x = (ox + c * (SPEC.w + GAP)) * PX_MM, y = (oy + r * (SPEC.h + GAP)) * PX_MM;
+      const w = SPEC.w * PX_MM, h = SPEC.h * PX_MM;
+      ctx.drawImage(cache.get(p), x, y, w, h);
+      if ($('cutLines').checked) {
+        ctx.strokeStyle = '#a7abb2'; ctx.lineWidth = 1;
+        ctx.strokeRect(Math.round(x) - 0.5, Math.round(y) - 0.5, Math.round(w) + 1, Math.round(h) + 1);
+      }
+    });
+  });
+
+  $('capN').textContent = L.cap;
+  $('capTxt').textContent = t('capacity');
+  $('totalTxt').textContent = t('total', { n: slots.length, p: nPages });
+  $('sheetCap').textContent = `${PAPERS[key].label} · ${t('pages', { p: nPages })} · 300 DPI`;
+  const ready = slots.length > 0;
+  $('dlSheet').disabled = $('printSheet').disabled = !ready;
+  $('dlSheet').textContent = nPages > 1 ? t('dlN', { p: nPages }) : t('dl');
+}
+
+// JPEG with real DPI in the JFIF header so print shops print at true size.
+async function jpegWithDpi(canvas, dpi) {
+  const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.95));
+  const buf = new Uint8Array(await blob.arrayBuffer());
+  if (buf[2] === 0xFF && buf[3] === 0xE0 && String.fromCharCode(...buf.slice(6, 10)) === 'JFIF') {
+    buf[13] = 1; buf[14] = dpi >> 8; buf[15] = dpi & 255; buf[16] = dpi >> 8; buf[17] = dpi & 255;
+  }
+  return new Blob([buf], { type: 'image/jpeg' });
+}
+function download(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+$('dlSheet').onclick = async () => {
+  buildSheets();
+  const key = $('paper').value;
+  for (let i = 0; i < pages.length; i++) {
+    const suffix = pages.length > 1 ? `-${i + 1}` : '';
+    download(await jpegWithDpi(pages[i], DPI), `visa-photo-35x45-${key}${suffix}.jpg`);
+    await new Promise(r => setTimeout(r, 400));
+  }
+};
+$('dlSingle').onclick = async () => cur && download(await jpegWithDpi(photoCanvas(cur, 600), 600), `visa-photo-35x45-${photos.indexOf(cur) + 1}.jpg`);
+
+$('printSheet').onclick = () => {
+  buildSheets();
+  const L = layout($('paper').value);
+  const f = document.createElement('iframe');
+  f.style.cssText = 'position:fixed;width:0;height:0;border:0;right:0;bottom:0';
+  document.body.appendChild(f);
+  const d = f.contentDocument;
+  d.open();
+  d.write(`<!doctype html><style>@page{size:${L.W}mm ${L.H}mm;margin:0}html,body{margin:0}img{width:${L.W}mm;height:${L.H}mm;display:block;break-after:page}img:last-child{break-after:auto}</style>` +
+    pages.map(c => `<img src="${c.toDataURL('image/jpeg', 0.95)}">`).join(''));
+  d.close();
+  f.contentWindow.onafterprint = () => setTimeout(() => f.remove(), 500);
+  const imgs = [...d.images];
+  Promise.all(imgs.map(i => i.decode())).then(() => f.contentWindow.print());
+};
+
+applyI18n();
+setStatus('sLoading');
+loadModels();
+</script>
+</body>
+</html>
